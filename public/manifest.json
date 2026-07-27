@@ -1,0 +1,16 @@
+{
+  "name": "StrengthBender System",
+  "short_name": "StrengthBender",
+  "description": "The 13-Week StrengthBender PR Tracker",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050B14",
+  "theme_color": "#050B14",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
