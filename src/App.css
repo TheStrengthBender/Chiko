@@ -137,7 +137,7 @@ body::before {
 h1 {
   font-family: 'Space Grotesk', 'Outfit', sans-serif;
   font-size: 2.25rem;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: -0.04em;
   margin-bottom: 0.25rem;
 }
@@ -145,7 +145,7 @@ h1 {
 h2 {
   font-family: 'Space Grotesk', 'Outfit', sans-serif;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 900;
   font-style: italic;
   letter-spacing: -0.02em;
   margin-bottom: 1.25rem;
@@ -156,27 +156,43 @@ h3 {
   font-family: 'Space Grotesk', 'Outfit', sans-serif;
 }
 
+/* Screen 1: Comic Title "CHIKO_LIFTS" */
 .app-title {
   font-family: 'Space Grotesk', 'Outfit', sans-serif;
-  font-size: 3.2rem;
+  font-size: 3.4rem;
   font-weight: 900;
   font-style: italic;
-  letter-spacing: -0.04em;
-  margin-bottom: 0.25rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.2rem;
   text-transform: uppercase;
-  /* Miles Morales Spray Crimson to Venom Electric Gold gradient */
-  background: linear-gradient(180deg, #ffffff 0%, #ff1744 35%, #ff0044 70%, #ffe600 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  /* Spray Paint 3D comic drop shadow */
-  filter: drop-shadow(0 3px 0 #8b0020) drop-shadow(0 6px 16px rgba(255, 0, 68, 0.65)) drop-shadow(0 0 24px rgba(255, 230, 0, 0.3));
-  line-height: 1.1;
+  color: #f8fafc;
+  -webkit-text-stroke: 1.5px #0a0c14;
+  text-shadow: 
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    3px 3px 0 #ff0044,
+    5px 5px 0 #000,
+    0 0 25px rgba(255, 0, 68, 0.45);
+  line-height: 1;
+}
+
+.app-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #ff0044 0%, #ff1744 45%, #ffe600 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .text-secondary {
@@ -242,136 +258,245 @@ h3 {
   gap: 6px;
 }
 
-/* Progress Bar (Venom Charge) */
-.progress-container {
-  background: var(--surface);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-top: 1px solid rgba(255, 0, 68, 0.35);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 0, 68, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+/* Screen 1: Venom Charge Progress Box with Electric Lightning Aura */
+.venom-charge-box {
   position: relative;
-  overflow: hidden;
+  background: #080910;
+  border: 2px solid #ffe600;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 26px;
+  box-shadow: 
+    0 0 18px rgba(255, 230, 0, 0.45),
+    0 6px 20px rgba(0, 0, 0, 0.8),
+    inset 0 0 15px rgba(0, 0, 0, 0.9);
 }
 
-.progress-container::after {
-  content: '';
+.venom-lightning-aura {
   position: absolute;
-  top: 0; right: 0;
-  width: 80px; height: 80px;
-  background: radial-gradient(circle at 100% 0%, rgba(255, 230, 0, 0.15) 0%, transparent 70%);
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
   pointer-events: none;
+  overflow: visible;
+  z-index: 2;
 }
 
-.progress-header {
+.lightning-svg {
+  position: absolute;
+  filter: drop-shadow(0 0 6px #ffe600);
+}
+.lightning-svg.top-left { top: -8px; left: -8px; width: 50px; height: 34px; }
+.lightning-svg.top-right { top: -8px; right: -8px; width: 50px; height: 34px; }
+.lightning-svg.bottom-left { bottom: -8px; left: -8px; width: 50px; height: 34px; }
+.lightning-svg.bottom-right { bottom: -8px; right: -8px; width: 50px; height: 34px; }
+
+.venom-charge-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 3;
 }
 
-.progress-title {
-  font-family: 'Space Grotesk', 'Outfit', sans-serif;
+.venom-charge-title {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.15rem;
   font-weight: 900;
   font-style: italic;
-  color: var(--venom);
+  color: #ffe600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  text-shadow: 0 0 10px var(--venom-glow);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(255, 230, 0, 0.65);
 }
 
-.progress-percent {
+.venom-charge-percent {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
   font-weight: 900;
-  font-size: 1.35rem;
-  color: #fff;
   font-style: italic;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
-.progress-track {
-  height: 14px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 8px;
+.venom-track-wrapper {
+  position: relative;
+  height: 18px;
+  background: #0d0f18;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95);
+  z-index: 3;
 }
 
-.progress-fill {
+.venom-track-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff0044 0%, #ff6600 55%, #ffe600 100%);
-  border-radius: 8px;
-  box-shadow: 0 0 14px var(--venom-glow), 0 0 8px var(--accent-glow);
-  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(90deg, #ff0044 0%, #ff8800 45%, #ffe600 100%);
+  box-shadow: 0 0 14px rgba(255, 230, 0, 0.8), 0 0 8px rgba(255, 0, 68, 0.6);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Dashboard / Weeks View */
+.cracked-web-detail {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 45px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Screen 1: 3x3 Week Grid */
 .week-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   margin-top: 1rem;
 }
 
-.week-card {
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-top: 1px solid rgba(255, 0, 68, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 20px 16px;
-  text-align: center;
+.comic-week-card {
+  position: relative;
+  background: #141724;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1.2px, transparent 1.2px);
+  background-size: 8px 8px;
+  border: 2.5px solid #282f44;
+  border-radius: 14px;
+  height: 98px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: var(--transition-smooth);
-  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
-.week-card:hover {
-  border-color: rgba(255, 0, 68, 0.45);
+.comic-week-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 0, 68, 0.2);
+  border-color: #ff0044;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 0, 68, 0.35);
 }
 
-.week-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%);
-  opacity: 0;
-  transition: opacity var(--transition-smooth);
+.comic-week-card.completed {
+  border-color: #ffe600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 230, 0, 0.4);
 }
 
-.week-card:active {
-  transform: scale(0.96);
-}
-
-.week-number {
-  font-family: 'Space Grotesk', 'Outfit', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 900;
+.comic-week-num {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
   font-style: italic;
+  font-weight: 900;
+  font-size: 2rem;
+  color: #ffffff;
+  line-height: 1;
   margin-bottom: 4px;
-  background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
   position: relative;
   z-index: 2;
 }
 
-.week-phase {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
+.comic-week-phase {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
+  letter-spacing: 0.04em;
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
   position: relative;
   z-index: 2;
+}
+
+/* Active Week KAPOW Starburst Card */
+.kapow-starburst-container {
+  position: relative;
+  height: 98px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  filter: drop-shadow(0 0 16px rgba(255, 230, 0, 0.7)) drop-shadow(0 6px 16px rgba(0, 0, 0, 0.9));
+  transition: transform 0.2s ease;
+  z-index: 10;
+}
+
+.kapow-starburst-container:hover {
+  transform: scale(1.05);
+}
+
+.starburst-lightning-glow {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px #ffe600);
+}
+
+.kapow-starburst-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kapow-starburst-shadow {
+  position: absolute;
+  width: 104%;
+  height: 104%;
+  background: #000000;
+  clip-path: polygon(
+    50% 0%, 63% 18%, 82% 6%, 79% 27%, 100% 25%, 88% 44%, 100% 60%, 82% 68%, 88% 90%, 68% 82%, 58% 100%, 46% 84%, 28% 96%, 32% 76%, 10% 78%, 20% 58%, 0% 50%, 18% 36%, 6% 20%, 28% 22%, 34% 0%, 50% 16%
+  );
+  transform: translate(2px, 3px);
+}
+
+.kapow-starburst-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #fff266 0%, #ffe600 50%, #ffd000 100%);
+  clip-path: polygon(
+    50% 0%, 63% 18%, 82% 6%, 79% 27%, 100% 25%, 88% 44%, 100% 60%, 82% 68%, 88% 90%, 68% 82%, 58% 100%, 46% 84%, 28% 96%, 32% 76%, 10% 78%, 20% 58%, 0% 50%, 18% 36%, 6% 20%, 28% 22%, 34% 0%, 50% 16%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.kapow-text-week {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1.85rem;
+  color: #000000;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-shadow: 1px 1px 0px rgba(255, 0, 68, 0.4);
+}
+
+.kapow-text-phase {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 0.58rem;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  margin-top: 2px;
 }
 
 /* Miles Morales Bio-Electric Venom Strike Aura */
@@ -408,18 +533,20 @@ h3 {
   text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
 }
 
-/* Days View */
+/* Days View (Screen 2: Week View) */
 .days-header {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
-.back-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
+.comic-back-btn {
+  background: #000000;
+  border: 2px solid #ff0044;
+  color: #ffffff;
   cursor: pointer;
   width: 44px;
   height: 44px;
@@ -427,249 +554,326 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
-  backdrop-filter: blur(10px);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+  box-shadow: 0 0 12px rgba(255, 0, 68, 0.45);
+  flex-shrink: 0;
 }
 
-.back-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow);
+.comic-back-btn:hover {
+  transform: scale(1.06);
+  background: #14050a;
 }
 
-.back-btn:active {
+.comic-back-btn:active {
   transform: scale(0.92);
-  background: var(--surface-hover);
+}
+
+.tech-circuit-web {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 180px;
+  height: 140px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .day-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
 }
 
-.day-card {
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-top: 1px solid rgba(255, 0, 68, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 22px;
+.comic-day-card {
+  position: relative;
+  background: #121522;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1.2px, transparent 1.2px);
+  background-size: 9px 9px;
+  border-radius: 12px;
+  padding: 20px 22px;
   cursor: pointer;
-  transition: var(--transition-smooth);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 8px 25px rgba(255, 0, 68, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: visible;
 }
 
-.day-card:hover {
-  border-color: rgba(255, 0, 68, 0.45);
-  background: var(--surface-hover);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 0, 68, 0.15);
+.comic-day-card:hover {
+  transform: translateY(-2px);
 }
 
-.day-card:active {
-  transform: scale(0.98);
-  background: var(--surface-hover);
+/* Day 1: Crimson Red Neon Glow */
+.comic-day-card.glow-red {
+  border: 2px solid #ff0044;
+  box-shadow: 0 0 16px rgba(255, 0, 68, 0.5), 0 4px 16px rgba(0, 0, 0, 0.8), inset 0 0 12px rgba(255, 0, 68, 0.08);
 }
 
-.day-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+/* Days 2-5: Transitioning into Cyan / Blue Neon Glow */
+.comic-day-card.glow-cyan {
+  border: 2px solid #00f0ff;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.45), 0 4px 16px rgba(0, 0, 0, 0.8), inset 0 0 12px rgba(0, 240, 255, 0.08);
 }
 
-.day-title {
-  font-family: 'Space Grotesk', 'Outfit', sans-serif;
-  font-size: 1.35rem;
-  font-weight: 800;
+.comic-day-title {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
   font-style: italic;
-  letter-spacing: -0.01em;
+  font-weight: 900;
+  font-size: 1.65rem;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
 }
 
-.day-preview {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
+.comic-day-subtext {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  color: #a0a0a0;
+  font-weight: 500;
 }
 
-/* Workout View */
+/* Blank White Jagged Speech Bubble overlapping Day Card */
+.comic-speech-bubble {
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 32px;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.85));
+  z-index: 5;
+}
+
+/* Screen 3: Day View (Exercise Execution) */
+.day-view-container {
+  position: relative;
+  padding-top: 10px;
+}
+
+.split-sunburst-banner {
+  position: absolute;
+  top: -24px;
+  left: -20px;
+  right: -20px;
+  height: 130px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+.sunburst-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.comic-util-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0d0f18;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.comic-util-btn:hover, .comic-util-btn.active {
+  border-color: #ff0044;
+  background: rgba(255, 0, 68, 0.2);
+  color: #ff0044;
+  box-shadow: 0 0 12px rgba(255, 0, 68, 0.5);
+}
+
 .exercise-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-top: 1.5rem;
-}
-
-.exercise-item {
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: var(--transition-smooth);
   position: relative;
+  z-index: 2;
+}
+
+/* Exercise Cards: Dark background, halftone dots, rough hand-inked borders */
+.comic-exercise-card {
+  position: relative;
+  background: #121522;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1.2px, transparent 1.2px);
+  background-size: 9px 9px;
+  border: 2px solid #282f42;
+  border-radius: 14px;
+  padding: 20px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
 }
 
-.exercise-item::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; bottom: 0;
-  width: 5px;
-  background: transparent;
-  transition: var(--transition-smooth);
+.comic-exercise-card.completed {
+  border-color: rgba(255, 0, 68, 0.65);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 0, 68, 0.25);
 }
 
-.exercise-item.main-lift::before {
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow);
-}
-
-.exercise-item.completed {
-  background: rgba(255, 230, 0, 0.06);
-  border-color: rgba(255, 230, 0, 0.35);
-}
-
-.exercise-item.completed.main-lift::before {
-  background: var(--venom);
-  box-shadow: 0 0 16px var(--venom-glow);
-}
-
-.exercise-details {
-  flex: 1;
-  padding-left: 12px;
-}
-
-.exercise-name {
-  font-size: 1.2rem;
+.comic-ex-name {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: 1.25rem;
   font-weight: 800;
-  margin-bottom: 8px;
+  color: #ffffff;
   letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.exercise-meta {
+/* Badges (Sets / Reps / RPE) in pill containers */
+.comic-badges-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  margin-bottom: 12px;
 }
 
-.tag {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 4px 10px;
+/* "1 x 1" Red background, black text */
+.comic-badge-sets {
+  background: #ff0044;
+  color: #000000;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 3px 10px;
   border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
-.tag-accent {
-  background: rgba(255, 0, 68, 0.18);
-  color: #ff4d6d;
-  border: 1px solid rgba(255, 0, 68, 0.3);
-}
-
-.exercise-notes {
-  margin-top: 12px;
+/* "85%" Dark background, red text & border */
+.comic-badge-intensity {
+  background: #181520;
+  color: #ff0044;
+  border: 1.5px solid #ff0044;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
   font-size: 0.85rem;
-  color: var(--text-secondary);
-  font-style: italic;
-  line-height: 1.4;
-  border-left: 2px solid var(--accent);
-  padding-left: 10px;
+  padding: 2px 10px;
+  border-radius: 6px;
 }
 
-.exercise-weight {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--accent);
-  margin-top: 8px;
-  font-style: italic;
-  text-shadow: 0 2px 10px var(--accent-glow);
+/* "RPE 7.5-8" Dark background, red text & border */
+.comic-badge-rpe {
+  background: #181520;
+  color: #ff0044;
+  border: 1.5px solid #ff0044;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 2px 10px;
+  border-radius: 6px;
 }
 
-.exercise-item.completed .exercise-weight {
-  color: var(--venom);
-  text-shadow: 0 2px 10px var(--venom-glow);
-}
-
-.checkbox-wrapper {
-  padding-left: 20px;
+/* Target Load: Massively upscaled, bold, italic, bright red */
+.comic-load-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 4px;
 }
 
-/* Miles Morales Spider-Sense / Venom Checkbox */
-.custom-checkbox {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 0, 68, 0.45);
+.comic-weight-num {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 2.8rem;
+  color: #ff0044;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 0 16px rgba(255, 0, 68, 0.45);
+}
+
+.comic-weight-unit {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-style: normal;
+}
+
+.comic-calc-subtext {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Coach's notes with vertical red line blockquote border and white italic text */
+.comic-coach-note {
+  margin-top: 10px;
+  border-left: 2.5px solid #ff0044;
+  padding-left: 10px;
+  color: #ffffff;
+  font-style: italic;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* Action Toggles: Incomplete = rough hand-drawn red circle; Complete = dark grey with checkmark & action ripples */
+.comic-toggle-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: var(--transition-smooth);
-  background: rgba(8, 10, 16, 0.7);
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7);
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  margin-left: 12px;
 }
 
-.custom-checkbox:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow), inset 0 2px 6px rgba(0, 0, 0, 0.7);
-}
-
-.custom-checkbox svg {
-  transition: opacity 0.2s;
-  color: transparent;
-}
-
-.custom-checkbox:active {
-  transform: scale(0.9);
-}
-
-.custom-checkbox.checked {
-  background: radial-gradient(circle at 35% 35%, #ff0044 0%, #a60028 100%);
-  border-color: #ff0044;
-  box-shadow: 0 0 16px rgba(255, 0, 68, 0.85), 0 0 6px rgba(255, 230, 0, 0.5), inset -2px -2px 6px rgba(0, 0, 0, 0.5);
-}
-
-.custom-checkbox.checked svg {
-  opacity: 0;
-  display: none;
-}
-
-.custom-checkbox.checked::after {
-  content: '✓';
-  position: absolute;
-  color: #fff;
-  font-weight: 900;
-  font-size: 19px;
-  text-shadow: 0 0 8px rgba(255, 230, 0, 0.9);
-  z-index: 2;
-}
-
-/* Spider-Verse comic gloss highlight */
-.custom-checkbox.checked::before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  width: 10px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.75);
+.comic-toggle-circle {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  transform: rotate(-45deg);
-  filter: blur(1px);
+  border: 2.5px solid #ff0044;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(255, 0, 68, 0.3);
+}
+
+.comic-toggle-circle.checked {
+  background: #2a2e3d;
+  border-color: #ff0044;
+  box-shadow: 0 0 14px rgba(255, 0, 68, 0.65);
+}
+
+.comic-toggle-check {
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Comic action ripple lines flanking toggle & nav items */
+.comic-action-ripples {
+  position: absolute;
+  width: 54px;
+  height: 36px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.comic-action-ripples.active {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px #ff0044);
 }
 
 /* Animations */
@@ -682,55 +886,73 @@ h3 {
   animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Nav Bar */
+/* Global Component 2: Bottom Navigation Bar */
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(7, 8, 12, 0.94); /* Matte carbon black */
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 1px solid rgba(255, 0, 68, 0.25);
+  height: 72px;
+  background: #000000 !important; /* True black */
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-around;
-  padding: 12px 0;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  align-items: center;
+  padding: 0 16px;
+  padding-bottom: env(safe-area-inset-bottom);
   z-index: 100;
-  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.8), 0 -1px 8px rgba(255, 0, 68, 0.15);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.95);
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition-fast);
+  justify-content: center;
   background: transparent;
   border: none;
-  width: 60px;
+  color: #a0a0a0; /* Flat light grey */
+  cursor: pointer;
+  position: relative;
+  padding: 6px 14px;
+  transition: color 0.18s ease;
+  width: 72px;
+}
+
+.nav-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 30px;
+  margin-bottom: 2px;
+}
+
+.nav-label {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 0.72rem;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a0a0a0;
+  transition: color 0.18s ease;
 }
 
-.nav-item svg {
-  transition: transform var(--transition-fast);
-}
-
-.nav-item:active svg {
-  transform: scale(0.85);
-}
-
+/* Active State: Glow neon red with red action lines flanking icon */
 .nav-item.active {
-  color: var(--accent);
+  color: #ff0044;
+}
+
+.nav-item.active .nav-label {
+  color: #ff0044;
+  text-shadow: 0 0 10px rgba(255, 0, 68, 0.8);
 }
 
 .nav-item.active svg {
-  color: var(--accent);
-  filter: drop-shadow(0 0 10px var(--accent-glow));
+  color: #ff0044;
+  filter: drop-shadow(0 0 10px rgba(255, 0, 68, 0.85));
 }
 
 .main-content {
@@ -834,3 +1056,293 @@ h3 {
 .complete-btn:active {
   transform: scale(0.98);
 }
+
+/* ==========================================================================
+   SPIDER-VERSE "COMIC-BOOK SNAP" MOTION & INTERACTION SYSTEM
+   ========================================================================== */
+
+/* 1. Global Motion & Physics: Touch Down (Active State) */
+button:active,
+.comic-week-card:active,
+.comic-day-card:active,
+.comic-exercise-card:active,
+.kapow-starburst-container:active,
+.comic-toggle-wrapper:active,
+.comic-back-btn:active,
+.comic-util-btn:active,
+.nav-item:active {
+  transform: scale(0.97) !important;
+  filter: brightness(0.88) !important;
+  transition: transform 0.06s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.06s ease-out !important;
+}
+
+/* 2. Screen-to-Screen: Diagonal Comic Panel Slide with 12fps Posterize-Time */
+@keyframes comicPanelSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate(32px, -12px) rotate(1deg);
+    clip-path: polygon(4% 0%, 100% 0%, 96% 100%, 0% 100%);
+  }
+  33% {
+    opacity: 0.65;
+    transform: translate(16px, -6px) rotate(0.5deg);
+  }
+  66% {
+    opacity: 0.9;
+    transform: translate(4px, -1px) rotate(-0.3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+}
+
+.comic-panel-transition {
+  animation: comicPanelSlideIn 0.22s steps(4, end) forwards;
+  position: relative;
+  will-change: transform, opacity;
+}
+
+/* Thick hand-drawn black comic panel gutter line on diagonal entry */
+.comic-panel-transition::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -8px;
+  width: 5px;
+  background: #000000;
+  border-left: 2px solid #ff0044;
+  border-right: 2px solid #00f0ff;
+  transform: rotate(-0.6deg);
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.9;
+}
+
+/* 3. Bottom Nav: 2-Frame Sketchy Ink-Pop & White Active Icon */
+@keyframes inkPop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.22) rotate(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.nav-item.active svg {
+  color: #ffffff !important; /* Instantly turns white */
+  filter: drop-shadow(0 0 10px #ff0044) drop-shadow(0 0 18px rgba(255, 0, 68, 0.7)) !important;
+}
+
+.nav-item.active .comic-action-ripples {
+  animation: inkPop 0.12s steps(2, end) forwards;
+}
+
+/* 4. Venom Charge: Live Electric Random Flicker & Jagged Zaps */
+@keyframes liveElectricFlicker {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 7px #ffe600);
+  }
+  12% {
+    opacity: 0.25;
+    filter: drop-shadow(0 0 2px #ffe600);
+  }
+  24% {
+    opacity: 0.95;
+    filter: drop-shadow(0 0 10px #ffe600);
+  }
+  38% {
+    opacity: 0.15;
+    filter: none;
+  }
+  52% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 8px #ffe600);
+  }
+  68% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 3px #ffe600);
+  }
+  82% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px #ffe600);
+  }
+}
+
+.venom-lightning-aura {
+  animation: liveElectricFlicker 2.6s steps(8) infinite;
+}
+
+.venom-track-fill {
+  /* Fills in erratic, jagged zaps using stepped transition */
+  transition: width 0.35s steps(6, end) !important;
+}
+
+/* 5. Week Selection: KAPOW Comic Impact Jitter */
+@keyframes comicImpactJitter {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.14) rotate(-3deg); }
+  50% { transform: scale(1.04) rotate(3deg); }
+  75% { transform: scale(1.08) rotate(-1.5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.kapow-starburst-container.jittering {
+  animation: comicImpactJitter 0.16s steps(4) forwards;
+}
+
+/* 6. Day Selection: 0.1s Border Flashbulb Flare */
+@keyframes flashbulbRed {
+  0% {
+    box-shadow: 0 0 16px rgba(255, 0, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(255, 0, 68, 1), 0 0 22px #ffffff;
+    border-color: #ffffff;
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 16px rgba(255, 0, 68, 0.5);
+    transform: scale(1);
+  }
+}
+
+@keyframes flashbulbCyan {
+  0% {
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(0, 240, 255, 1), 0 0 22px #ffffff;
+    border-color: #ffffff;
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+    transform: scale(1);
+  }
+}
+
+.comic-day-card.flaring-red {
+  animation: flashbulbRed 0.1s steps(2, end) forwards;
+}
+
+.comic-day-card.flaring-cyan {
+  animation: flashbulbCyan 0.1s steps(2, end) forwards;
+}
+
+/* Speech Bubble Pop */
+@keyframes speechBubblePop {
+  0% {
+    transform: translateY(-50%) scale(0.6) rotate(-8deg);
+    opacity: 0.5;
+  }
+  60% {
+    transform: translateY(-50%) scale(1.3) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.comic-speech-bubble {
+  transform-origin: bottom left;
+  animation: speechBubblePop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards;
+}
+
+.comic-speech-bubble:active {
+  transform: translateY(-50%) scale(1.4) rotate(6deg) !important;
+  transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.4) !important;
+}
+
+.comic-day-card.flaring-red .comic-speech-bubble,
+.comic-day-card.flaring-cyan .comic-speech-bubble {
+  transform: translateY(-50%) scale(1.35) rotate(5deg) !important;
+  transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.4) !important;
+}
+
+/* 7. Exercise Checkbox: 3-Frame Marker Slash & Impact Burst */
+@keyframes markerSlash {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transform: scale(0.55) rotate(-18deg);
+  }
+  50% {
+    clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+    transform: scale(1.3) rotate(6deg);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.comic-toggle-check {
+  display: inline-block;
+  animation: markerSlash 0.14s steps(3, end) forwards;
+}
+
+/* Impact action lines burst */
+@keyframes impactBurst {
+  0% {
+    transform: scale(0.7);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.comic-action-ripples.bursting {
+  animation: impactBurst 0.3s steps(4, end) forwards !important;
+}
+
+/* Exercise Card Dimming and Corner Web Pulse */
+.comic-exercise-card.completed {
+  opacity: 0.82;
+  transition: opacity 0.2s steps(2);
+}
+
+.comic-exercise-card.completed .comic-ex-name,
+.comic-exercise-card.completed .comic-load-container,
+.comic-exercise-card.completed .comic-weight-num {
+  opacity: 0.88;
+}
+
+@keyframes webPulse {
+  0% {
+    opacity: 0.35;
+    filter: none;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    filter: drop-shadow(0 0 10px #ff0044);
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.35;
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+.comic-exercise-card.just-completed .comic-corner-web {
+  animation: webPulse 0.4s steps(3) forwards;
+}
+

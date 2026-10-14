@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { programData } from './data/program';
 import { dayExplanations } from './data/explanations';
 import { Settings, Calendar, CheckCircle2, ChevronLeft, Target, FileText, Info, SlidersHorizontal, X, TrendingUp, Calculator } from 'lucide-react';
+import { 
+  CornerWeb, 
+  VenomLightningAura, 
+  CrackedWebDetail, 
+  KapowStarburst, 
+  TechCircuitWeb, 
+  SplitSunburstBanner, 
+  ComicSpeechBubble, 
+  ComicActionRipples 
+} from './components/ComicElements';
+import { triggerHaptic } from './utils/haptics';
 import './App.css';
 
 const MAXES_KEY = 'fourLift_maxes';
@@ -17,6 +28,10 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedWeek, setSelectedWeek] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [featuredWeek] = useState(8); // Showcase active week KAPOW starburst
+  const [tappingWeek, setTappingWeek] = useState(null); // Week jitter on tap
+  const [flaringDay, setFlaringDay] = useState(null); // Day border flashbulb flare
+  const [justCompletedEx, setJustCompletedEx] = useState(null); // Exercise check burst
   
   const [maxes, setMaxes] = useState(() => {
     const saved = localStorage.getItem(MAXES_KEY);
@@ -110,13 +125,22 @@ function App() {
 
   const toggleExercise = (week, day, exerciseIdx) => {
     const key = `${week}-${day}-${exerciseIdx}`;
+    const willComplete = !progress[key];
+    if (willComplete) {
+      triggerHaptic('burst');
+      setJustCompletedEx(key);
+      setTimeout(() => setJustCompletedEx(null), 450);
+    } else {
+      triggerHaptic('tick');
+    }
     setProgress(prev => ({
       ...prev,
-      [key]: !prev[key]
+      [key]: willComplete
     }));
   };
 
   const completeSession = (week, dayData) => {
+    triggerHaptic('burst');
     const newProgress = { ...progress };
     dayData.exercises.forEach((ex, idx) => {
       newProgress[`${week}-${dayData.day}-${idx}`] = true;
@@ -124,6 +148,35 @@ function App() {
     setProgress(newProgress);
     setSelectedDay(null);
     setSelectedWeek(null);
+  };
+
+  const handleSelectWeek = (w) => {
+    triggerHaptic('thud');
+    setTappingWeek(w.week);
+    setTimeout(() => {
+      setSelectedWeek(w);
+      setTappingWeek(null);
+    }, 150);
+  };
+
+  const handleSelectDay = (week, day) => {
+    triggerHaptic('tick');
+    setFlaringDay(day.day);
+    setTimeout(() => {
+      setSelectedDay({ week, dayData: day });
+      setIsNotesOpen(false);
+      setIsInfoOpen(false);
+      setFlaringDay(null);
+    }, 110);
+  };
+
+  const handleSpeechBubbleClick = (e, day) => {
+    e.stopPropagation();
+    triggerHaptic('tick');
+    if (selectedWeek) {
+      setSelectedDay({ week: selectedWeek.week, dayData: day });
+      setIsInfoOpen(true);
+    }
   };
 
   const isWeekCompleted = (weekData) => {
@@ -260,34 +313,58 @@ function App() {
 
     return (
       <div className="animate-fade">
-        <div className="progress-container">
-          <div className="progress-header">
-            <span className="progress-title">Venom Charge</span>
-            <span className="progress-percent" style={progressPercent === 100 ? {color: 'var(--venom)', textShadow: '0 0 15px var(--venom-glow)'} : {}}>
+        {/* Venom Charge Progress Bar with Electric Lightning Aura */}
+        <div className="venom-charge-box">
+          <VenomLightningAura />
+          <div className="venom-charge-header">
+            <span className="venom-charge-title">VENOM CHARGE</span>
+            <span className="venom-charge-percent">
               {progressPercent === 100 ? 'MAX VENOM BLAST!' : `${progressPercent}%`}
             </span>
           </div>
-          <div className="progress-track">
-            <div className="progress-fill" style={{ width: `${progressPercent}%` }}></div>
+          <div className="venom-track-wrapper">
+            <div className="venom-track-fill" style={{ width: `${progressPercent}%` }} />
+            <CrackedWebDetail />
           </div>
         </div>
 
-        <h2 className="text-gradient">Program Overview</h2>
-        <p className="text-secondary" style={{marginBottom: '1.5rem'}}>Select a week to view and track your training.</p>
+        <h2 className="text-gradient" style={{marginTop: '1.75rem', marginBottom: '0.25rem', fontSize: '1.35rem'}}>
+          PROGRAM OVERVIEW
+        </h2>
+        <p className="text-secondary" style={{marginBottom: '1.25rem', fontSize: '0.9rem', color: '#a0a0a0'}}>
+          Select a week to view and track your training.
+        </p>
+
+        {/* 3x3 Grid with W8 Action Starburst & Corner Webs */}
         <div className="week-grid">
           {programData.map((w, idx) => {
             const completed = isWeekCompleted(w);
+            const isFeatured = w.week === featuredWeek || w.week === tappingWeek;
+
+            if (isFeatured) {
+              return (
+                <KapowStarburst 
+                  key={idx}
+                  weekNum={w.week}
+                  phase={w.phase}
+                  isJittering={w.week === tappingWeek}
+                  onClick={() => handleSelectWeek(w)}
+                />
+              );
+            }
+
             return (
               <div 
                 key={idx} 
-                className={`week-card ${completed ? 'completed' : ''}`} 
-                onClick={() => setSelectedWeek(w)}
+                className={`comic-week-card ${completed ? 'completed' : ''}`} 
+                onClick={() => handleSelectWeek(w)}
               >
-                <div className="week-number">W{w.week}</div>
-                <div className="week-phase">{w.phase}</div>
+                <CornerWeb position="top-left" size={38} opacity={0.35} />
+                <div className="comic-week-num">W{w.week}</div>
+                <div className="comic-week-phase">{w.phase}</div>
                 {completed && (
-                  <div style={{position: 'absolute', top: 8, right: 8, color: '#30d158'}}>
-                    <CheckCircle2 size={16} />
+                  <div style={{position: 'absolute', top: 6, right: 6, color: '#ffe600'}}>
+                    <CheckCircle2 size={15} />
                   </div>
                 )}
               </div>
@@ -299,14 +376,20 @@ function App() {
   };
 
   const renderWeek = (weekData) => (
-    <div className="animate-fade">
+    <div className="comic-panel-transition" style={{position: 'relative'}}>
+      {/* Top right Tech Circuit Lines & Webbing */}
+      <TechCircuitWeb />
+      <CornerWeb position="bottom-left" size={90} opacity={0.35} />
+
       <div className="days-header">
-        <button className="back-btn" onClick={() => setSelectedWeek(null)}>
+        <button className="comic-back-btn" onClick={() => { triggerHaptic('tick'); setSelectedWeek(null); }} aria-label="Back to overview">
           <ChevronLeft size={24} />
         </button>
         <div>
-          <h2 style={{marginBottom: 0, fontSize: '1.75rem'}}>Week {weekData.week}</h2>
-          <span className="text-secondary" style={{fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase'}}>{weekData.phase}</span>
+          <h2 style={{marginBottom: 0, fontSize: '2rem', fontStyle: 'italic', fontWeight: 900}}>Week {weekData.week}</h2>
+          <span style={{fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.06em', color: '#a0a0a0', textTransform: 'uppercase'}}>
+            {weekData.phase}
+          </span>
         </div>
       </div>
       
@@ -317,26 +400,23 @@ function App() {
              const mains = day.exercises.filter(e => e.isMain).map(e => e.name);
              dayFocus = mains.join(" / ");
           }
-          
-          let dayCompleted = false;
-          if (day.exercises && day.exercises.length > 0) {
-            let total = day.exercises.length;
-            let done = 0;
-            day.exercises.forEach((ex, i) => {
-              if (progress[`${weekData.week}-${day.day}-${i}`]) done++;
-            });
-            dayCompleted = (total === done && total > 0);
-          }
+
+          // Top cards use crimson red neon glow (Day 1), while lower cards transition into cyan/blue neon glow
+          const glowClass = idx === 0 ? 'glow-red' : 'glow-cyan';
+          const isFlaring = flaringDay === day.day;
+          const flareClass = isFlaring ? (idx === 0 ? 'flaring-red' : 'flaring-cyan') : '';
+          // Comic speech bubble overlapping right-side border (e.g. Day 2 and Day 4 as shown in mockup)
+          const hasSpeechBubble = idx === 1 || idx === 3;
 
           return (
-            <div key={idx} className="day-card" onClick={() => { setSelectedDay({week: weekData.week, dayData: day}); setIsNotesOpen(false); setIsInfoOpen(false); }}>
-              <div className="day-header">
-                <div className="day-title">Day {day.day}</div>
-                {dayCompleted && (
-                   <div style={{color: 'var(--success)'}}><CheckCircle2 size={22} /></div>
-                )}
-              </div>
-              <div className="day-preview">{dayFocus}</div>
+            <div 
+              key={idx} 
+              className={`comic-day-card ${glowClass} ${flareClass}`} 
+              onClick={() => handleSelectDay(weekData.week, day)}
+            >
+              <div className="comic-day-title">Day {day.day}</div>
+              <div className="comic-day-subtext">{dayFocus}</div>
+              {hasSpeechBubble && <ComicSpeechBubble onClick={(e) => handleSpeechBubbleClick(e, day)} />}
             </div>
           );
         })}
@@ -804,37 +884,50 @@ function App() {
     const dayKey = `${week}-${dayData.day}`;
     
     return (
-      <div className="animate-fade">
-        <div className="days-header">
-          <button className="back-btn" onClick={() => setSelectedDay(null)}>
-            <ChevronLeft size={24} />
-          </button>
-          <div style={{flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <h2 style={{marginBottom: 0, fontSize: '1.5rem'}}>Week {week} - Day {dayData.day}</h2>
-            <div style={{display: 'flex', gap: '8px'}}>
-              <button className="back-btn" onClick={() => setIsInfoOpen(!isInfoOpen)} style={{background: isInfoOpen ? 'var(--accent)' : 'var(--surface)', color: isInfoOpen ? '#fff' : 'var(--text-primary)'}}>
-                <Info size={20} />
-              </button>
-              <button className="back-btn" onClick={() => setIsNotesOpen(!isNotesOpen)} style={{background: isNotesOpen ? 'var(--accent)' : 'var(--surface)', color: isNotesOpen ? '#fff' : 'var(--text-primary)'}}>
-                <FileText size={20} />
-              </button>
-            </div>
+      <div className="comic-panel-transition day-view-container">
+        {/* Background Banner: Comic action-line sunburst, split diagonally with red on left and blue on right */}
+        <SplitSunburstBanner />
+
+        <div className="days-header" style={{justifyContent: 'space-between', marginBottom: '1.75rem'}}>
+          <div style={{display: 'flex', alignItems: 'center', gap: '14px'}}>
+            <button className="comic-back-btn" onClick={() => { triggerHaptic('tick'); setSelectedDay(null); }} aria-label="Back to week">
+              <ChevronLeft size={24} />
+            </button>
+            <h2 style={{marginBottom: 0, fontSize: '1.65rem', fontStyle: 'italic', fontWeight: 900}}>
+              Week {week} - Day {dayData.day}
+            </h2>
+          </div>
+          <div style={{display: 'flex', gap: '10px'}}>
+            <button 
+              className={`comic-util-btn ${isInfoOpen ? 'active' : ''}`} 
+              onClick={() => { triggerHaptic('tick'); setIsInfoOpen(!isInfoOpen); }} 
+              title="Day Rationale"
+            >
+              <Info size={19} />
+            </button>
+            <button 
+              className={`comic-util-btn ${isNotesOpen ? 'active' : ''}`} 
+              onClick={() => { triggerHaptic('tick'); setIsNotesOpen(!isNotesOpen); }} 
+              title="Session Notes"
+            >
+              <FileText size={19} />
+            </button>
           </div>
         </div>
         
         {isInfoOpen && dayExplanations[dayKey] && (
-          <div className="glass-panel animate-fade" style={{marginBottom: '1.5rem', padding: '16px', background: 'rgba(58, 134, 255, 0.08)', borderColor: 'rgba(58, 134, 255, 0.3)'}}>
-            <h3 style={{fontSize: '1rem', color: '#60a5fa', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px', fontStyle: 'italic'}}>
+          <div className="glass-panel animate-fade" style={{marginBottom: '1.5rem', padding: '16px', background: 'rgba(0, 240, 255, 0.08)', borderColor: 'rgba(0, 240, 255, 0.35)', position: 'relative', zIndex: 3}}>
+            <h3 style={{fontSize: '1rem', color: '#00f0ff', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px', fontStyle: 'italic', fontWeight: 800}}>
               <Info size={16} /> Day Focus & Rationale
             </h3>
-            <p style={{fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 0}}>
+            <p style={{fontSize: '0.9rem', color: '#f1f5f9', lineHeight: 1.6, marginBottom: 0}}>
               {dayExplanations[dayKey]}
             </p>
           </div>
         )}
         
         {isNotesOpen && (
-          <div className="glass-panel" style={{marginBottom: '1.5rem', padding: '16px'}}>
+          <div className="glass-panel" style={{marginBottom: '1.5rem', padding: '16px', position: 'relative', zIndex: 3}}>
             <textarea 
               className="input-field" 
               style={{minHeight: '100px', resize: 'vertical', fontSize: '1rem', fontWeight: 500, color: 'var(--text-primary)'}}
@@ -846,8 +939,8 @@ function App() {
         )}
 
         {dayData.notes && (
-          <div className="glass-panel" style={{marginBottom: '1.5rem', padding: '16px 20px', background: 'rgba(255, 0, 68, 0.08)', borderColor: 'rgba(255, 0, 68, 0.3)'}}>
-            <p style={{fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 500, lineHeight: 1.5}}>{dayData.notes}</p>
+          <div className="glass-panel" style={{marginBottom: '1.5rem', padding: '14px 18px', background: 'rgba(255, 0, 68, 0.08)', borderColor: 'rgba(255, 0, 68, 0.35)', position: 'relative', zIndex: 3}}>
+            <p style={{fontSize: '0.92rem', color: '#f8fafc', fontWeight: 600, lineHeight: 1.5, fontStyle: 'italic'}}>{dayData.notes}</p>
           </div>
         )}
 
@@ -863,64 +956,92 @@ function App() {
             const calcBreakdown = getCalcBreakdown(ex);
             
             const isEditing = editingEx === exKey;
+            const isJustCompleted = justCompletedEx === exKey;
             
             return (
-              <div key={idx} className={`exercise-item ${isDone ? 'completed' : ''} ${ex.isMain ? 'main-lift' : ''}`}>
-                <div style={{display: 'flex', width: '100%'}}>
-                  <div className="exercise-details" style={{flex: 1}}>
-                    <div className="exercise-name" style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+              <div key={idx} className={`comic-exercise-card ${isDone ? 'completed' : ''} ${isJustCompleted ? 'just-completed' : ''}`}>
+                {/* Faint white/cyan spider webs in the bottom-left and top-right corners */}
+                <CornerWeb position="top-right" size={46} opacity={0.35} />
+                <CornerWeb position="bottom-left" size={46} opacity={0.35} />
+
+                <div style={{display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                  <div style={{flex: 1, position: 'relative', zIndex: 2}}>
+                    {/* Exercise Title */}
+                    <div className="comic-ex-name">
                       <span>{ex.name}</span>
                       {ex.isMain && (
                         <div style={{display: 'flex', gap: '6px'}}>
                           <button 
-                            className="back-btn" 
+                            className="comic-util-btn" 
                             onClick={(e) => { e.stopPropagation(); setCalcOpenEx(exKey); setEditingEx(null); }}
-                            style={{padding: '4px', background: 'transparent', color: 'var(--text-secondary)'}}
+                            style={{width: '32px', height: '32px'}}
+                            title="Warmup Calculator"
                           >
-                            <Calculator size={18} />
+                            <Calculator size={15} />
                           </button>
                           <button 
-                            className="back-btn" 
+                            className={`comic-util-btn ${isEditing ? 'active' : ''}`} 
                             onClick={(e) => { e.stopPropagation(); setEditingEx(isEditing ? null : exKey); }}
-                            style={{padding: '4px', background: isEditing ? 'var(--accent)' : 'transparent', color: isEditing ? '#000' : 'var(--text-secondary)'}}
+                            style={{width: '32px', height: '32px'}}
+                            title="Adjust Load/RPE"
                           >
-                            {isEditing ? <X size={18} /> : <SlidersHorizontal size={18} />}
+                            {isEditing ? <X size={15} /> : <SlidersHorizontal size={15} />}
                           </button>
                         </div>
                       )}
                     </div>
                     
-                    <div className="exercise-meta">
-                      {ex.isRest && <span className="tag tag-accent">Rest day</span>}
-                      {ex.sets && ex.reps && <span className="tag tag-accent">{ex.sets} × {ex.reps}</span>}
-                      {intensityTag && <span className="tag">{intensityTag}</span>}
-                      {displayRpe && <span className="tag">RPE {displayRpe}</span>}
+                    {/* Badges (Sets / Reps / RPE) in pill containers */}
+                    <div className="comic-badges-row">
+                      {ex.isRest && <span className="comic-badge-sets">REST DAY</span>}
+                      {ex.sets && ex.reps && (
+                        <span className="comic-badge-sets">{ex.sets} × {ex.reps}</span>
+                      )}
+                      {intensityTag && (
+                        <span className="comic-badge-intensity">{intensityTag}</span>
+                      )}
+                      {displayRpe && (
+                        <span className="comic-badge-rpe">RPE {displayRpe}</span>
+                      )}
                     </div>
                     
+                    {/* Target Load: Massively upscaled, bold, italic, bright red ("285") with smaller white "lbs" */}
                     {displayWeight > 0 && (
-                      <div style={{marginTop: '6px'}}>
-                        <div className="exercise-weight">
-                          {displayWeight} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 600}}>lbs</span>
+                      <div style={{marginTop: '4px'}}>
+                        <div className="comic-load-container">
+                          <span className="comic-weight-num">{displayWeight}</span>
+                          <span className="comic-weight-unit">lbs</span>
                         </div>
                         {calcBreakdown && (
-                          <div className="exercise-calc-subtext">
+                          <div className="comic-calc-subtext">
                             {calcBreakdown}
                           </div>
                         )}
                       </div>
                     )}
                     
-                    {ex.notes && <div className="exercise-notes">{ex.notes}</div>}
+                    {/* Coach's notes with vertical red line blockquote border and white italic text */}
+                    {ex.notes && (
+                      <div className="comic-coach-note">
+                        {ex.notes}
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="checkbox-wrapper" onClick={() => toggleExercise(week, dayData.day, idx)}>
-                    <div className={`custom-checkbox ${isDone ? 'checked' : ''}`}>
-                      <CheckCircle2 size={20} />
+                  {/* Action Toggles: rough red circle outline, complete = dark grey + checkmark + action ripples */}
+                  <div 
+                    className="comic-toggle-wrapper" 
+                    onClick={() => toggleExercise(week, dayData.day, idx)}
+                    title={isDone ? "Mark incomplete" : "Mark complete"}
+                  >
+                    <ComicActionRipples active={isDone} bursting={isJustCompleted} />
+                    <div className={`comic-toggle-circle ${isDone ? 'checked' : ''}`}>
+                      {isDone && <span className="comic-toggle-check">✓</span>}
                     </div>
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -1158,9 +1279,9 @@ function App() {
   return (
     <>
       {renderSpiderWebs()}
-      <div style={{marginBottom: '2rem', marginTop: '1rem', textAlign: 'center'}}>
-        <h1 className="app-title">Chiko_lifts</h1>
-        <p className="text-secondary" style={{fontSize: '0.92rem', fontWeight: 700, letterSpacing: '0.05em', color: 'rgba(255, 255, 255, 0.8)'}}>StrengthBender System</p>
+      <div style={{marginBottom: '1.75rem', marginTop: '0.75rem', textAlign: 'center'}}>
+        <h1 className="app-title">Chiko_Lifts</h1>
+        <p className="app-subtitle">StrengthBender System</p>
       </div>
 
       <main className="main-content">
@@ -1168,17 +1289,35 @@ function App() {
       </main>
 
       <nav className="bottom-nav">
-        <button className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>
-          <Calendar size={26} strokeWidth={2.5} />
-          <span>Plan</span>
+        <button 
+          className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} 
+          onClick={() => { triggerHaptic('tick'); setActiveTab('dashboard'); setSelectedDay(null); setSelectedWeek(null); }}
+        >
+          <div className="nav-icon-container">
+            {activeTab === 'dashboard' && <ComicActionRipples active />}
+            <Calendar size={22} strokeWidth={2.5} />
+          </div>
+          <span className="nav-label">Plan</span>
         </button>
-        <button className={`nav-item ${activeTab === 'progress' ? 'active' : ''}`} onClick={() => setActiveTab('progress')}>
-          <TrendingUp size={26} strokeWidth={2.5} />
-          <span>Progress</span>
+        <button 
+          className={`nav-item ${activeTab === 'progress' ? 'active' : ''}`} 
+          onClick={() => { triggerHaptic('tick'); setActiveTab('progress'); }}
+        >
+          <div className="nav-icon-container">
+            {activeTab === 'progress' && <ComicActionRipples active />}
+            <TrendingUp size={22} strokeWidth={2.5} />
+          </div>
+          <span className="nav-label">Progress</span>
         </button>
-        <button className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
-          <Settings size={26} strokeWidth={2.5} />
-          <span>Maxes</span>
+        <button 
+          className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} 
+          onClick={() => { triggerHaptic('tick'); setActiveTab('settings'); }}
+        >
+          <div className="nav-icon-container">
+            {activeTab === 'settings' && <ComicActionRipples active />}
+            <Settings size={22} strokeWidth={2.5} />
+          </div>
+          <span className="nav-label">Maxes</span>
         </button>
       </nav>
 
