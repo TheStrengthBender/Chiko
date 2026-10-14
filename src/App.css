@@ -1375,3 +1375,177 @@ button:active,
   animation: webPulse 0.4s steps(3) forwards;
 }
 
+/* ==========================================================================
+   DYNAMIC ONOMATOPOEIA & IMPACT VFX SYSTEM (GLOBAL PORTAL OVERLAY)
+   ========================================================================== */
+
+/* Global Decoupled Portal Overlay - Zero Z-Index Collisions / Zero Clipping */
+.vfx-portal-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999999;
+  overflow: hidden;
+}
+
+.vfx-item {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+/* Tier 3: 50ms Screen Shake Effect on Parent Container */
+@keyframes screenShake50ms {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-8px, 6px) rotate(-0.6deg); }
+  40% { transform: translate(7px, -6px) rotate(0.5deg); }
+  60% { transform: translate(-5px, 4px) rotate(-0.3deg); }
+  80% { transform: translate(4px, -3px) rotate(0.2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.screen-shaking {
+  animation: screenShake50ms 0.08s steps(4) ease-in-out !important;
+}
+
+/* Tier 1: High Velocity / Low RPE (THWIP!, SNAP!, ZAP!) */
+/* Scale 0 -> 1 in 150ms linear spring, immediate fade out */
+@keyframes tier1LinearSpring {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-6deg);
+    opacity: 0;
+  }
+  65% {
+    transform: translate(-50%, -50%) scale(1.15) rotate(2deg);
+    opacity: 1;
+  }
+  85% {
+    transform: translate(-50%, -50%) scale(0.98) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.05) translateY(-8px);
+    opacity: 0;
+  }
+}
+
+.vfx-item.tier-1-thwip {
+  animation: tier1LinearSpring 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.8));
+}
+
+.vfx-tier1-svg {
+  width: 220px;
+  height: 90px;
+  overflow: visible;
+}
+
+.vfx-text-tier1 {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 42px;
+  letter-spacing: -0.04em;
+}
+
+.vfx-text-tier1-shadow {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 42px;
+  letter-spacing: -0.04em;
+}
+
+/* Tier 2: Working Sets / Moderate RPE (BAM!, BOOM!) */
+/* 300ms duration, 12fps stop-motion stutter, electric yellow with halftone shadow */
+@keyframes tier2Stutter12fps {
+  0% {
+    transform: translate(-50%, -50%) scale(0.4) rotate(-10deg);
+    opacity: 0;
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(1.28) rotate(4deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(0.94) rotate(-2deg);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(1.06) rotate(1deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1) translateY(-6px);
+    opacity: 0;
+  }
+}
+
+.vfx-item.tier-2-bam {
+  animation: tier2Stutter12fps 0.32s steps(4, end) forwards;
+  filter: drop-shadow(0 0 14px rgba(255, 230, 0, 0.75)) drop-shadow(0 6px 16px rgba(0, 0, 0, 0.9));
+}
+
+.vfx-tier2-svg {
+  width: 250px;
+  height: 130px;
+  overflow: visible;
+}
+
+.vfx-text-tier2 {
+  font-family: 'Bangers', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: 58px;
+  letter-spacing: 0.02em;
+}
+
+/* Tier 3: PRs / Grinders (CRUSH!, KAPOW!, SMASH!) */
+/* 600ms massive screen-spanning impact, crimson red core, yellow stroke, black jagged border */
+@keyframes tier3KapowExplosion {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3) rotate(-16deg);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1.55) rotate(5deg);
+    opacity: 1;
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.15) rotate(-3deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.3) rotate(2deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1.22) rotate(-1deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4) translateY(-14px);
+    opacity: 0;
+  }
+}
+
+.vfx-item.tier-3-kapow {
+  animation: tier3KapowExplosion 0.6s steps(6, end) forwards;
+  filter: drop-shadow(0 0 26px rgba(255, 0, 68, 0.85)) drop-shadow(0 0 45px rgba(255, 230, 0, 0.6)) drop-shadow(0 10px 30px rgba(0, 0, 0, 0.95));
+}
+
+.vfx-tier3-svg {
+  width: 340px;
+  height: 190px;
+  overflow: visible;
+}
+
+.vfx-text-tier3 {
+  font-family: 'Bangers', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: 68px;
+  letter-spacing: 0.04em;
+}
+
+

@@ -11,6 +11,7 @@ import {
   SplitSunburstBanner, 
   ComicActionRipples 
 } from './components/ComicElements';
+import { VFXProvider, useVFX, determineVFXTier } from './components/VFXOverlay';
 import { triggerHaptic } from './utils/haptics';
 import './App.css';
 
@@ -39,7 +40,8 @@ const WEEK_CORNER_POSITIONS = [
   'top-left',    // W13
 ];
 
-function App() {
+function AppContent() {
+  const { spawnVFX } = useVFX() || {};
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedWeek, setSelectedWeek] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -138,24 +140,61 @@ function App() {
     return `(${pct}% of ${maxVal} lb max${plusStr})`;
   };
 
-  const toggleExercise = (week, day, exerciseIdx) => {
+  const toggleExercise = (week, day, exerciseIdx, event) => {
     const key = `${week}-${day}-${exerciseIdx}`;
     const willComplete = !progress[key];
+
     if (willComplete) {
-      triggerHaptic('burst');
       setJustCompletedEx(key);
       setTimeout(() => setJustCompletedEx(null), 450);
+
+      // Dynamic Onomatopoeia & Impact VFX Matrix
+      const weekData = programData.find(w => w.week === week);
+      const dayData = weekData?.days.find(d => d.day === day);
+      const ex = dayData?.exercises[exerciseIdx];
+      const defaultWeight = ex ? calculateWeight(ex) : 0;
+      const displayWeight = adjustments[key]?.weight ?? defaultWeight;
+      const displayRpe = adjustments[key]?.rpe ?? ex?.rpe;
+      const userMax = ex?.lift ? maxes[ex.lift] : null;
+
+      const vfxConfig = determineVFXTier(ex, displayRpe, displayWeight, userMax);
+
+      // Paired tactile haptic feedback per intensity tier
+      if (vfxConfig.tier === 3) {
+        triggerHaptic('burst');
+      } else if (vfxConfig.tier === 2) {
+        triggerHaptic('thud');
+      } else {
+        triggerHaptic('tick');
+      }
+
+      // Anchor point: exactly at the user's touch coordinate
+      if (spawnVFX) {
+        let coords = null;
+        if (event?.clientX && event?.clientY) {
+          coords = { x: event.clientX, y: event.clientY };
+        } else if (event?.target) {
+          const rect = event.target.getBoundingClientRect();
+          coords = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        }
+        spawnVFX(vfxConfig, coords);
+      }
     } else {
       triggerHaptic('tick');
     }
+
     setProgress(prev => ({
       ...prev,
       [key]: willComplete
     }));
   };
 
-  const completeSession = (week, dayData) => {
+  const completeSession = (week, dayData, event) => {
     triggerHaptic('burst');
+    if (spawnVFX) {
+      const coords = event?.clientX ? { x: event.clientX, y: event.clientY } : null;
+      spawnVFX({ tier: 3, text: 'SESSION CRUSHED!', duration: 600, screenShake: true }, coords);
+    }
     const newProgress = { ...progress };
     dayData.exercises.forEach((ex, idx) => {
       newProgress[`${week}-${dayData.day}-${idx}`] = true;
@@ -1038,7 +1077,7 @@ function App() {
                   {/* Action Toggles: rough red circle outline, complete = dark grey + checkmark + action ripples */}
                   <div 
                     className="comic-toggle-wrapper" 
-                    onClick={() => toggleExercise(week, dayData.day, idx)}
+                    onClick={(e) => toggleExercise(week, dayData.day, idx, e)}
                     title={isDone ? "Mark incomplete" : "Mark complete"}
                   >
                     <ComicActionRipples active={isDone} bursting={isJustCompleted} />
@@ -1053,7 +1092,7 @@ function App() {
         </div>
 
         <button 
-          onClick={() => completeSession(week, dayData)}
+          onClick={(e) => completeSession(week, dayData, e)}
           style={{
             width: '100%', 
             padding: '16px', 
@@ -1331,6 +1370,14 @@ function App() {
       {renderCalculatorModal()}
       {renderAdjustmentModal()}
     </>
+  );
+}
+
+function App() {
+  return (
+    <VFXProvider>
+      <AppContent />
+    </VFXProvider>
   );
 }
 
