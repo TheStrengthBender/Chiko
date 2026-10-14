@@ -17,6 +17,8 @@ import './App.css';
 
 const MAXES_KEY = 'fourLift_maxes';
 const PROGRESS_KEY = 'fourLift_progress';
+const NOTES_KEY = 'fourLift_notes';
+const ADJUSTMENTS_KEY = 'fourLift_adjustments';
 const APP_VERSION_KEY = 'fourLift_version';
 const CURRENT_VERSION = 'strengthbender_system_v1';
 
@@ -51,36 +53,39 @@ function AppContent() {
   const [justCompletedEx, setJustCompletedEx] = useState(null); // Exercise check burst
   
   const [maxes, setMaxes] = useState(() => {
-    const saved = localStorage.getItem(MAXES_KEY);
-    return saved ? JSON.parse(saved) : { squat: 325, bench: 225, deadlift: 405 };
+    try {
+      const saved = localStorage.getItem(MAXES_KEY);
+      return saved ? JSON.parse(saved) : { squat: 325, bench: 225, deadlift: 405 };
+    } catch {
+      return { squat: 325, bench: 225, deadlift: 405 };
+    }
   });
 
   const [progress, setProgress] = useState(() => {
-    if (localStorage.getItem(APP_VERSION_KEY) !== CURRENT_VERSION) {
-      localStorage.setItem(APP_VERSION_KEY, CURRENT_VERSION);
-      localStorage.removeItem(PROGRESS_KEY);
-      localStorage.removeItem('fourLift_notes');
-      localStorage.removeItem('fourLift_adjustments');
+    try {
+      const saved = localStorage.getItem(PROGRESS_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
       return {};
     }
-    const saved = localStorage.getItem(PROGRESS_KEY);
-    return saved ? JSON.parse(saved) : {};
   });
 
   const [sessionNotes, setSessionNotes] = useState(() => {
-    if (localStorage.getItem(APP_VERSION_KEY) !== CURRENT_VERSION) {
+    try {
+      const saved = localStorage.getItem(NOTES_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
       return {};
     }
-    const saved = localStorage.getItem('fourLift_notes');
-    return saved ? JSON.parse(saved) : {};
   });
 
   const [adjustments, setAdjustments] = useState(() => {
-    if (localStorage.getItem(APP_VERSION_KEY) !== CURRENT_VERSION) {
+    try {
+      const saved = localStorage.getItem(ADJUSTMENTS_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
       return {};
     }
-    const saved = localStorage.getItem('fourLift_adjustments');
-    return saved ? JSON.parse(saved) : {};
   });
   
   const [activeProjLift, setActiveProjLift] = useState('squat');
@@ -91,25 +96,39 @@ function AppContent() {
   const [calcOpenEx, setCalcOpenEx] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem(MAXES_KEY, JSON.stringify(maxes));
+    try {
+      localStorage.setItem(MAXES_KEY, JSON.stringify(maxes));
+    } catch (e) {}
   }, [maxes]);
 
   useEffect(() => {
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+    } catch (e) {}
   }, [progress]);
 
   useEffect(() => {
-    localStorage.setItem('fourLift_notes', JSON.stringify(sessionNotes));
+    try {
+      localStorage.setItem(NOTES_KEY, JSON.stringify(sessionNotes));
+    } catch (e) {}
   }, [sessionNotes]);
 
   useEffect(() => {
-    localStorage.setItem('fourLift_adjustments', JSON.stringify(adjustments));
+    try {
+      localStorage.setItem(ADJUSTMENTS_KEY, JSON.stringify(adjustments));
+    } catch (e) {}
   }, [adjustments]);
 
   const handleMaxChange = (e) => {
     const { name, value } = e.target;
     const num = value === '' ? '' : Number(value);
-    setMaxes(prev => ({ ...prev, [name]: num }));
+    setMaxes(prev => {
+      const next = { ...prev, [name]: num };
+      try {
+        localStorage.setItem(MAXES_KEY, JSON.stringify(next));
+      } catch (err) {}
+      return next;
+    });
   };
 
   const handleResetProgress = () => {
@@ -118,8 +137,8 @@ function AppContent() {
       setSessionNotes({});
       setAdjustments({});
       localStorage.removeItem(PROGRESS_KEY);
-      localStorage.removeItem('fourLift_notes');
-      localStorage.removeItem('fourLift_adjustments');
+      localStorage.removeItem(NOTES_KEY);
+      localStorage.removeItem(ADJUSTMENTS_KEY);
     }
   };
 
@@ -197,10 +216,16 @@ function AppContent() {
       triggerHaptic('tick');
     }
 
-    setProgress(prev => ({
-      ...prev,
-      [key]: willComplete
-    }));
+    setProgress(prev => {
+      const next = {
+        ...prev,
+        [key]: willComplete
+      };
+      try {
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(next));
+      } catch (err) {}
+      return next;
+    });
   };
 
   const completeSession = (week, dayData) => {
@@ -220,6 +245,9 @@ function AppContent() {
     dayData.exercises.forEach((ex, idx) => {
       newProgress[`${week}-${dayData.day}-${idx}`] = true;
     });
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(newProgress));
+    } catch (err) {}
     setProgress(newProgress);
 
     // Give user time to enjoy the full 2.1-second celebration before navigating back
@@ -540,15 +568,20 @@ function AppContent() {
         ...current,
         [field]: numVal
       };
+      let next;
       if (updated.weight === undefined && updated.rpe === undefined) {
-        const copy = { ...prev };
-        delete copy[exKey];
-        return copy;
+        next = { ...prev };
+        delete next[exKey];
+      } else {
+        next = {
+          ...prev,
+          [exKey]: updated
+        };
       }
-      return {
-        ...prev,
-        [exKey]: updated
-      };
+      try {
+        localStorage.setItem(ADJUSTMENTS_KEY, JSON.stringify(next));
+      } catch (err) {}
+      return next;
     });
   };
 
@@ -556,7 +589,20 @@ function AppContent() {
     setAdjustments(prev => {
       const copy = { ...prev };
       delete copy[exKey];
+      try {
+        localStorage.setItem(ADJUSTMENTS_KEY, JSON.stringify(copy));
+      } catch (err) {}
       return copy;
+    });
+  };
+
+  const handleNoteChange = (dayKey, text) => {
+    setSessionNotes(prev => {
+      const next = { ...prev, [dayKey]: text };
+      try {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(next));
+      } catch (err) {}
+      return next;
     });
   };
 
@@ -1039,7 +1085,7 @@ function AppContent() {
               style={{minHeight: '100px', resize: 'vertical', fontSize: '1rem', fontWeight: 500, color: 'var(--text-primary)'}}
               placeholder="Add your training notes for this session..."
               value={sessionNotes[dayKey] || ''}
-              onChange={(e) => setSessionNotes({...sessionNotes, [dayKey]: e.target.value})}
+              onChange={(e) => handleNoteChange(dayKey, e.target.value)}
             />
           </div>
         )}
