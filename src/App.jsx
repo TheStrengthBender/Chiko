@@ -146,7 +146,7 @@ function AppContent() {
 
     if (willComplete) {
       setJustCompletedEx(key);
-      setTimeout(() => setJustCompletedEx(null), 450);
+      setTimeout(() => setJustCompletedEx(null), 950);
 
       // Dynamic Onomatopoeia & Impact VFX Matrix
       const weekData = programData.find(w => w.week === week);
@@ -193,7 +193,7 @@ function AppContent() {
     triggerHaptic('burst');
     if (spawnVFX) {
       const coords = event?.clientX ? { x: event.clientX, y: event.clientY } : null;
-      spawnVFX({ tier: 3, text: 'SESSION CRUSHED!', duration: 600, screenShake: true }, coords);
+      spawnVFX({ tier: 3, text: 'SESSION CRUSHED!', duration: 1100, screenShake: true }, coords);
     }
     const newProgress = { ...progress };
     dayData.exercises.forEach((ex, idx) => {

@@ -21,18 +21,18 @@ export const determineVFXTier = (exercise, displayRpe, displayWeight, userMax) =
   const isHeavyAttempt = userMax && displayWeight >= userMax * 0.90;
   if (rpeNum >= 9 || isHeavyAttempt || String(displayRpe).includes('cap') && rpeNum >= 8.5) {
     const text = TIER_3_WORDS[Math.floor(Math.random() * TIER_3_WORDS.length)];
-    return { tier: 3, text, duration: 600, screenShake: true };
+    return { tier: 3, text, duration: 1100, screenShake: true };
   }
 
   // Tier 2: Working sets, moderate intensity (RPE 7.5 - 8.5)
   if (rpeNum >= 7.2) {
     const text = TIER_2_WORDS[Math.floor(Math.random() * TIER_2_WORDS.length)];
-    return { tier: 2, text, duration: 320, screenShake: false };
+    return { tier: 2, text, duration: 820, screenShake: false };
   }
 
   // Tier 1: High velocity / speed work / warmup / RPE < 7
   const text = TIER_1_WORDS[Math.floor(Math.random() * TIER_1_WORDS.length)];
-  return { tier: 1, text, duration: 200, screenShake: false };
+  return { tier: 1, text, duration: 700, screenShake: false };
 };
 
 // ==========================================
