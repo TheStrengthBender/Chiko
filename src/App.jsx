@@ -131,7 +131,21 @@ function AppContent() {
     return `${Math.round(ex.percent * 100)}%`;
   };
 
-  const getCalcBreakdown = (ex) => {
+  const getCalcBreakdown = (ex, week) => {
+    if (!ex) return null;
+    const isRow = ex.name && (ex.name.toLowerCase().includes('bent-over row') || ex.name.toLowerCase().includes('bent over row'));
+    if (isRow) {
+      const w1Weight = adjustments['1-5-1']?.weight;
+      if (w1Weight && Number(w1Weight) > 0) {
+        const wNum = week ? Number(week) : 1;
+        if (wNum === 1) {
+          return '(W1 base: adds +5 lb/wk automatically)';
+        }
+        return `(${w1Weight} lb in W1 + ${(wNum - 1) * 5} lb progression)`;
+      }
+      return '(Log W1 to auto-add +5 lb/wk)';
+    }
+
     if (!ex.percent || !ex.lift) return null;
     const pct = Math.round(ex.percent * 100);
     const maxVal = maxes[ex.lift] || 0;
@@ -152,7 +166,7 @@ function AppContent() {
       const weekData = programData.find(w => w.week === week);
       const dayData = weekData?.days.find(d => d.day === day);
       const ex = dayData?.exercises[exerciseIdx];
-      const defaultWeight = ex ? calculateWeight(ex) : 0;
+      const defaultWeight = ex ? calculateWeight(ex, week) : 0;
       const displayWeight = adjustments[key]?.weight ?? defaultWeight;
       const displayRpe = adjustments[key]?.rpe ?? ex?.rpe;
       const userMax = ex?.lift ? maxes[ex.lift] : null;
@@ -482,7 +496,20 @@ function AppContent() {
   );
 
   // All exercise weights calculate directly from the user's entered maxes
-  const calculateWeight = (exercise) => {
+  const calculateWeight = (exercise, week) => {
+    if (!exercise) return null;
+
+    // Bent-over row auto-progression: whatever weight is input by user on Week 1, add 5 lbs every following week automatically
+    const isRow = exercise.name && (exercise.name.toLowerCase().includes('bent-over row') || exercise.name.toLowerCase().includes('bent over row'));
+    if (isRow) {
+      const w1Weight = adjustments['1-5-1']?.weight;
+      if (w1Weight && Number(w1Weight) > 0) {
+        const wNum = week ? Number(week) : 1;
+        return Number(w1Weight) + (wNum - 1) * 5;
+      }
+      return null;
+    }
+
     if (!exercise.percent) return null;
     const liftRef = exercise.lift;
     if (!liftRef || !maxes[liftRef]) return null;
@@ -502,13 +529,31 @@ function AppContent() {
   };
 
   const handleAdjustmentChange = (exKey, field, value) => {
-    setAdjustments(prev => ({
-      ...prev,
-      [exKey]: {
-        ...(prev[exKey] || {}),
-        [field]: Number(value)
+    setAdjustments(prev => {
+      const current = prev[exKey] || {};
+      const numVal = (value === '' || value === null || value === undefined) ? undefined : Number(value);
+      const updated = {
+        ...current,
+        [field]: numVal
+      };
+      if (updated.weight === undefined && updated.rpe === undefined) {
+        const copy = { ...prev };
+        delete copy[exKey];
+        return copy;
       }
-    }));
+      return {
+        ...prev,
+        [exKey]: updated
+      };
+    });
+  };
+
+  const handleResetAdjustment = (exKey) => {
+    setAdjustments(prev => {
+      const copy = { ...prev };
+      delete copy[exKey];
+      return copy;
+    });
   };
 
   const calculatePlates = (targetWeight) => {
@@ -640,7 +685,7 @@ function AppContent() {
             const isDone = !!progress[exKey];
             if (isDone) completedLifts++;
             
-            const defWeight = calculateWeight(ex);
+            const defWeight = calculateWeight(ex, weekData.week);
             const defRpe = parseDefaultRPE(ex.rpe);
             const actWeight = adjustments[exKey]?.weight ?? defWeight;
             const actRpe = adjustments[exKey]?.rpe ?? defRpe;
@@ -1005,12 +1050,12 @@ function AppContent() {
           {dayData.exercises && dayData.exercises.map((ex, idx) => {
             const exKey = `${week}-${dayData.day}-${idx}`;
             const isDone = progress[exKey];
-            const defaultWeight = calculateWeight(ex);
+            const defaultWeight = calculateWeight(ex, week);
             
             const displayWeight = adjustments[exKey]?.weight ?? defaultWeight;
             const displayRpe = adjustments[exKey]?.rpe ?? ex.rpe;
             const intensityTag = getIntensityTag(ex);
-            const calcBreakdown = getCalcBreakdown(ex);
+            const calcBreakdown = getCalcBreakdown(ex, week);
             
             const isEditing = editingEx === exKey;
             const isJustCompleted = justCompletedEx === exKey;
@@ -1026,21 +1071,23 @@ function AppContent() {
                     {/* Exercise Title */}
                     <div className="comic-ex-name">
                       <span>{ex.name}</span>
-                      {ex.isMain && (
-                        <div style={{display: 'flex', gap: '6px'}}>
-                          <button 
-                            className="comic-util-btn" 
-                            onClick={(e) => { e.stopPropagation(); setCalcOpenEx(exKey); setEditingEx(null); }}
-                            style={{width: '32px', height: '32px'}}
-                            title="Warmup Calculator"
-                          >
-                            <Calculator size={15} />
-                          </button>
+                      {!ex.isRest && (
+                        <div style={{display: 'flex', gap: '6px', alignItems: 'center'}}>
+                          {ex.isMain && (
+                            <button 
+                              className="comic-util-btn" 
+                              onClick={(e) => { e.stopPropagation(); setCalcOpenEx(exKey); setEditingEx(null); }}
+                              style={{width: '32px', height: '32px'}}
+                              title="Warmup Calculator"
+                            >
+                              <Calculator size={15} />
+                            </button>
+                          )}
                           <button 
                             className={`comic-util-btn ${isEditing ? 'active' : ''}`} 
                             onClick={(e) => { e.stopPropagation(); setEditingEx(isEditing ? null : exKey); }}
                             style={{width: '32px', height: '32px'}}
-                            title="Adjust Load/RPE"
+                            title="Log / Adjust Weight & RPE"
                           >
                             {isEditing ? <X size={15} /> : <SlidersHorizontal size={15} />}
                           </button>
@@ -1063,7 +1110,7 @@ function AppContent() {
                     </div>
                     
                     {/* Target Load: Massively upscaled, bold, italic, bright red ("285") with smaller white "lbs" */}
-                    {displayWeight > 0 && (
+                    {displayWeight > 0 ? (
                       <div style={{marginTop: '4px'}}>
                         <div className="comic-load-container">
                           <span className="comic-weight-num">{displayWeight}</span>
@@ -1075,6 +1122,23 @@ function AppContent() {
                           </div>
                         )}
                       </div>
+                    ) : (
+                      !ex.isRest && (
+                        <div style={{marginTop: '6px'}}>
+                          <button 
+                            type="button"
+                            className="comic-add-weight-hint"
+                            onClick={(e) => { e.stopPropagation(); setEditingEx(exKey); }}
+                          >
+                            <SlidersHorizontal size={13} /> Log Weight &amp; RPE
+                          </button>
+                          {calcBreakdown && (
+                            <div className="comic-calc-subtext">
+                              {calcBreakdown}
+                            </div>
+                          )}
+                        </div>
+                      )
                     )}
                     
                     {/* Coach's notes with vertical red line blockquote border and white italic text */}
@@ -1135,57 +1199,147 @@ function AppContent() {
     const idx = parseInt(idxStr, 10);
     
     const weekData = programData.find(wd => wd.week === w);
-    const dayData = weekData.days.find(dd => dd.day === d);
-    const ex = dayData.exercises[idx];
+    const dayData = weekData?.days.find(dd => dd.day === d);
+    const ex = dayData?.exercises[idx];
+    if (!ex) return null;
     
-    const defaultWeight = calculateWeight(ex);
+    const defaultWeight = calculateWeight(ex, w);
     const defaultRpe = parseDefaultRPE(ex.rpe);
     
-    const displayWeight = adjustments[editingEx]?.weight ?? defaultWeight;
-    const displayRpe = adjustments[editingEx]?.rpe ?? defaultRpe;
+    const isCustomWeight = adjustments[editingEx]?.weight !== undefined;
+    const isCustomRpe = adjustments[editingEx]?.rpe !== undefined;
+    
+    const displayWeight = isCustomWeight ? adjustments[editingEx].weight : (defaultWeight ?? '');
+    const displayRpe = isCustomRpe ? adjustments[editingEx].rpe : defaultRpe;
+    const calcBreakdown = getCalcBreakdown(ex, w);
+
+    const isRow = ex.name && (ex.name.toLowerCase().includes('bent-over row') || ex.name.toLowerCase().includes('bent over row'));
+
+    const currentWeightNum = displayWeight === '' ? 0 : Number(displayWeight);
+    const sliderMax = Math.max(300, currentWeightNum > 0 ? currentWeightNum + 90 : 250);
 
     return (
-      <div className="modal-overlay animate-fade" onClick={() => setEditingEx(null)} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'}}>
-        <div className="glass-panel" onClick={e => e.stopPropagation()} style={{width: '100%', maxWidth: '400px', background: 'linear-gradient(145deg, rgba(15,20,30,0.95) 0%, rgba(5,10,20,0.98) 100%)', border: '1px solid var(--accent)', padding: '24px', position: 'relative', boxShadow: '0 10px 40px rgba(0,0,0,0.8)'}}>
+      <div className="modal-overlay animate-fade" onClick={() => setEditingEx(null)} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'}}>
+        <div className="glass-panel" onClick={e => e.stopPropagation()} style={{width: '100%', maxWidth: '420px', background: 'linear-gradient(145deg, rgba(15,20,30,0.97) 0%, rgba(5,10,20,0.99) 100%)', border: '1px solid var(--accent)', padding: '22px', position: 'relative', boxShadow: '0 10px 40px rgba(0,0,0,0.9)', maxHeight: '90vh', overflowY: 'auto'}}>
           
           <button onClick={() => setEditingEx(null)} style={{position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer'}}>
             <X size={24} />
           </button>
 
-          <div style={{textAlign: 'center', marginBottom: '32px', paddingRight: '24px', paddingLeft: '24px'}}>
-            <h3 style={{color: '#fff', fontSize: '1.2rem', marginBottom: '8px', lineHeight: 1.3}}>{ex.name}</h3>
-            <div style={{color: 'var(--text-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px'}}>Adjust Set Values</div>
+          <div style={{textAlign: 'center', marginBottom: '22px', paddingRight: '24px', paddingLeft: '24px'}}>
+            <h3 style={{color: '#fff', fontSize: '1.25rem', marginBottom: '4px', lineHeight: 1.3, fontStyle: 'italic', fontWeight: 900}}>{ex.name}</h3>
+            <div style={{color: 'var(--text-secondary)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px'}}>
+              Week {w} &bull; Day {d}
+            </div>
+            {isRow && w === 1 && (
+              <div style={{color: 'var(--venom)', fontSize: '0.78rem', marginTop: '6px', fontWeight: 600}}>
+                ⚡ Week 1 Row Baseline: Whatever weight you log here automatically adds +5 lbs every following week!
+              </div>
+            )}
+            {isRow && w > 1 && (
+              <div style={{color: 'var(--spider-sense)', fontSize: '0.78rem', marginTop: '6px', fontWeight: 600}}>
+                ⚡ Auto-calculated: +5 lbs/week from Week 1 base ({calcBreakdown})
+              </div>
+            )}
           </div>
 
-          {defaultWeight > 0 && (
-            <div className="slider-group" style={{marginBottom: '24px'}}>
-              <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '8px', alignItems: 'flex-end'}}>
-                <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px'}}>Weight</span>
-                <span style={{fontWeight: 900, color: 'var(--accent)', fontSize: '1.5rem'}}>{displayWeight} <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)'}}>lbs</span></span>
-              </div>
-              {getCalcBreakdown(ex) && (
-                <div style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '10px'}}>
-                  Programmed: {defaultWeight} lbs {getCalcBreakdown(ex)}
-                </div>
-              )}
-              <input 
-                type="range" 
-                className="custom-slider" 
-                min={Math.max(0, defaultWeight - 100)} 
-                max={defaultWeight + 100} 
-                step={5} 
-                value={displayWeight} 
-                onChange={(e) => handleAdjustmentChange(editingEx, 'weight', e.target.value)} 
-                style={{width: '100%'}}
-              />
+          {/* WEIGHT SECTION - ALWAYS VISIBLE FOR ALL EXERCISES */}
+          <div className="slider-group" style={{marginBottom: '20px', background: 'rgba(255, 255, 255, 0.02)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '8px', alignItems: 'center'}}>
+              <span style={{fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700}}>Weight / Load</span>
+              <span style={{fontWeight: 900, color: 'var(--accent)', fontSize: '1.4rem', fontStyle: 'italic'}}>
+                {displayWeight !== '' ? displayWeight : '0'} <span style={{fontSize: '0.85rem', color: 'var(--text-secondary)', fontStyle: 'normal'}}>lbs</span>
+              </span>
             </div>
-          )}
 
-          <div className="slider-group">
-            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px', alignItems: 'flex-end'}}>
-              <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px'}}>RPE</span>
-              <span style={{fontWeight: 900, color: 'var(--accent)', fontSize: '1.5rem'}}>{displayRpe}</span>
+            {calcBreakdown && !isRow && (
+              <div style={{fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '10px'}}>
+                Programmed: {defaultWeight} lbs {calcBreakdown}
+              </div>
+            )}
+
+            {/* Stepper & Direct Numeric Input */}
+            <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px'}}>
+              <button 
+                type="button"
+                className="comic-stepper-btn" 
+                onClick={() => handleAdjustmentChange(editingEx, 'weight', Math.max(0, currentWeightNum - 5))}
+                title="Subtract 5 lbs"
+              >
+                -5
+              </button>
+              <button 
+                type="button"
+                className="comic-stepper-btn" 
+                onClick={() => handleAdjustmentChange(editingEx, 'weight', Math.max(0, currentWeightNum - 2.5))}
+                title="Subtract 2.5 lbs"
+              >
+                -2.5
+              </button>
+              <input 
+                type="number" 
+                step="2.5" 
+                min="0"
+                max="999"
+                className="comic-input-weight" 
+                value={displayWeight} 
+                placeholder="0"
+                onChange={(e) => handleAdjustmentChange(editingEx, 'weight', e.target.value)} 
+              />
+              <button 
+                type="button"
+                className="comic-stepper-btn" 
+                onClick={() => handleAdjustmentChange(editingEx, 'weight', currentWeightNum + 2.5)}
+                title="Add 2.5 lbs"
+              >
+                +2.5
+              </button>
+              <button 
+                type="button"
+                className="comic-stepper-btn" 
+                onClick={() => handleAdjustmentChange(editingEx, 'weight', currentWeightNum + 5)}
+                title="Add 5 lbs"
+              >
+                +5
+              </button>
             </div>
+
+            {/* Range Slider for Quick Scrubbing */}
+            <input 
+              type="range" 
+              className="custom-slider" 
+              min={0} 
+              max={sliderMax} 
+              step={5} 
+              value={currentWeightNum} 
+              onChange={(e) => handleAdjustmentChange(editingEx, 'weight', e.target.value)} 
+              style={{width: '100%'}}
+            />
+
+            {/* Quick Chips for Common Weights */}
+            <div className="comic-chips-row">
+              {[45, 95, 135, 185, 225, 275, 315].map(chipW => (
+                <button 
+                  key={chipW}
+                  type="button"
+                  className={`comic-chip-btn ${currentWeightNum === chipW ? 'active' : ''}`}
+                  onClick={() => handleAdjustmentChange(editingEx, 'weight', chipW)}
+                >
+                  {chipW} lb
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* RPE SECTION - ALWAYS VISIBLE FOR ALL EXERCISES */}
+          <div className="slider-group" style={{marginBottom: '20px', background: 'rgba(255, 255, 255, 0.02)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '8px', alignItems: 'center'}}>
+              <span style={{fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700}}>RPE Prescribed / Logged</span>
+              <span style={{fontWeight: 900, color: 'var(--venom)', fontSize: '1.4rem', fontStyle: 'italic'}}>
+                RPE {displayRpe}
+              </span>
+            </div>
+
             <input 
               type="range" 
               className="custom-slider" 
@@ -1194,8 +1348,66 @@ function AppContent() {
               step={0.5} 
               value={displayRpe} 
               onChange={(e) => handleAdjustmentChange(editingEx, 'rpe', e.target.value)} 
-              style={{width: '100%'}}
+              style={{width: '100%', marginBottom: '10px'}}
             />
+
+            {/* Quick RPE Chips */}
+            <div className="comic-chips-row">
+              {[6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10].map(r => (
+                <button 
+                  key={r}
+                  type="button"
+                  className={`comic-chip-btn ${Number(displayRpe) === r ? 'active' : ''}`}
+                  onClick={() => handleAdjustmentChange(editingEx, 'rpe', r)}
+                >
+                  @{r}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* FOOTER ACTIONS */}
+          <div style={{display: 'flex', gap: '10px', marginTop: '16px'}}>
+            {(isCustomWeight || isCustomRpe) && (
+              <button 
+                type="button"
+                onClick={() => handleResetAdjustment(editingEx)}
+                style={{
+                  flex: 1, 
+                  padding: '12px', 
+                  background: 'rgba(255, 255, 255, 0.06)', 
+                  border: '1px solid rgba(255, 255, 255, 0.2)', 
+                  color: 'var(--text-secondary)', 
+                  borderRadius: 'var(--radius-sm)',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase'
+                }}
+              >
+                Reset Default
+              </button>
+            )}
+            <button 
+              type="button"
+              onClick={() => setEditingEx(null)}
+              style={{
+                flex: 2, 
+                padding: '12px', 
+                background: 'linear-gradient(90deg, #ff0044 0%, #ff1744 100%)', 
+                border: 'none', 
+                color: '#fff', 
+                borderRadius: 'var(--radius-sm)',
+                fontWeight: 900,
+                fontSize: '0.95rem',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                fontStyle: 'italic',
+                boxShadow: '0 4px 15px rgba(255, 0, 68, 0.4)'
+              }}
+            >
+              Done &bull; Save Load
+            </button>
           </div>
           
         </div>
@@ -1215,7 +1427,7 @@ function AppContent() {
     const dayData = weekData.days.find(dd => dd.day === d);
     const ex = dayData.exercises[idx];
     
-    const defaultWeight = calculateWeight(ex);
+    const defaultWeight = calculateWeight(ex, w);
     const displayWeight = adjustments[calcOpenEx]?.weight ?? defaultWeight;
 
     return (
@@ -1229,9 +1441,9 @@ function AppContent() {
           <div style={{textAlign: 'center', marginBottom: '24px', paddingRight: '24px', paddingLeft: '24px'}}>
             <h3 style={{color: '#fff', fontSize: '1.2rem', marginBottom: '8px', lineHeight: 1.3}}>{ex.name}</h3>
             <div style={{color: 'var(--accent)', fontSize: '2.5rem', fontWeight: 900, textShadow: '0 0 15px var(--accent-glow)'}}>{displayWeight} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 600}}>lbs</span></div>
-            {getCalcBreakdown(ex) && (
+            {getCalcBreakdown(ex, w) && (
               <div style={{color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '4px', fontWeight: 500}}>
-                {getCalcBreakdown(ex)}
+                {getCalcBreakdown(ex, w)}
               </div>
             )}
           </div>
