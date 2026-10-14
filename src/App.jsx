@@ -9,7 +9,6 @@ import {
   KapowStarburst, 
   TechCircuitWeb, 
   SplitSunburstBanner, 
-  ComicSpeechBubble, 
   ComicActionRipples 
 } from './components/ComicElements';
 import { triggerHaptic } from './utils/haptics';
@@ -168,15 +167,6 @@ function App() {
       setIsInfoOpen(false);
       setFlaringDay(null);
     }, 110);
-  };
-
-  const handleSpeechBubbleClick = (e, day) => {
-    e.stopPropagation();
-    triggerHaptic('tick');
-    if (selectedWeek) {
-      setSelectedDay({ week: selectedWeek.week, dayData: day });
-      setIsInfoOpen(true);
-    }
   };
 
   const isWeekCompleted = (weekData) => {
@@ -405,9 +395,6 @@ function App() {
           const glowClass = idx === 0 ? 'glow-red' : 'glow-cyan';
           const isFlaring = flaringDay === day.day;
           const flareClass = isFlaring ? (idx === 0 ? 'flaring-red' : 'flaring-cyan') : '';
-          // Comic speech bubble overlapping right-side border (e.g. Day 2 and Day 4 as shown in mockup)
-          const hasSpeechBubble = idx === 1 || idx === 3;
-
           return (
             <div 
               key={idx} 
@@ -416,7 +403,6 @@ function App() {
             >
               <div className="comic-day-title">Day {day.day}</div>
               <div className="comic-day-subtext">{dayFocus}</div>
-              {hasSpeechBubble && <ComicSpeechBubble onClick={(e) => handleSpeechBubbleClick(e, day)} />}
             </div>
           );
         })}
