@@ -22,6 +22,22 @@ const CURRENT_VERSION = 'strengthbender_system_v1';
 // Round to nearest 5 lb, matching Excel MROUND(x, 5). The epsilon guards against
 // floating-point results like 162.49999999 that Excel would treat as 162.5.
 const round5 = (x) => Math.round(x / 5 + 1e-9) * 5;
+// Organic randomized corner distribution for spiderwebs on week cards
+const WEEK_CORNER_POSITIONS = [
+  'top-left',    // W1
+  'top-right',   // W2
+  'top-right',   // W3
+  'top-right',   // W4
+  'bottom-left', // W5
+  'top-right',   // W6
+  'top-left',    // W7
+  'bottom-right',// W8
+  'top-right',   // W9
+  'top-left',    // W10
+  'bottom-left', // W11
+  'top-right',   // W12
+  'top-left',    // W13
+];
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -343,13 +359,15 @@ function App() {
               );
             }
 
+            const webPos = WEEK_CORNER_POSITIONS[w.week - 1] || 'top-left';
+
             return (
               <div 
                 key={idx} 
                 className={`comic-week-card ${completed ? 'completed' : ''}`} 
                 onClick={() => handleSelectWeek(w)}
               >
-                <CornerWeb position="top-left" size={38} opacity={0.35} />
+                <CornerWeb position={webPos} size={46} opacity={0.42} color="rgba(255, 255, 255, 0.45)" />
                 <div className="comic-week-num">W{w.week}</div>
                 <div className="comic-week-phase">{w.phase}</div>
                 {completed && (
