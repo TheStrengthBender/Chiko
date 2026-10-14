@@ -205,6 +205,107 @@ const Tier3KapowSVG = ({ text, x, y }) => (
   </div>
 );
 
+// Specialized Session Crushed Victory Starburst: Compact 2-line layout that fits all mobile screens
+const SessionCrushedSVG = ({ x, y }) => (
+  <div 
+    className="vfx-item tier-3-session-crushed" 
+    style={{ left: `${x}px`, top: `${y}px` }}
+    aria-hidden="true"
+  >
+    <svg className="vfx-session-svg" viewBox="0 0 320 220" fill="none">
+      {/* Outer Inked Shadow */}
+      <path 
+        d="M 25 110 L 55 50 L 95 65 L 130 20 L 165 55 L 210 25 L 245 65 L 295 50 L 275 110 L 305 150 L 260 165 L 235 200 L 190 175 L 145 205 L 115 170 L 65 195 L 55 145 L 15 135 Z" 
+        fill="#000000"
+        transform="translate(4, 5)"
+      />
+
+      {/* Crimson Core Starburst */}
+      <path 
+        d="M 25 110 L 55 50 L 95 65 L 130 20 L 165 55 L 210 25 L 245 65 L 295 50 L 275 110 L 305 150 L 260 165 L 235 200 L 190 175 L 145 205 L 115 170 L 65 195 L 55 145 L 15 135 Z" 
+        fill="#FF0044" 
+        stroke="#FFE600" 
+        strokeWidth="3.5" 
+        strokeLinejoin="miter"
+      />
+
+      {/* Lightning Sparks */}
+      <path d="M 55 50 L 35 25 L 48 38" stroke="#FFE600" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M 245 65 L 275 35 L 260 48" stroke="#FFE600" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M 65 195 L 40 215 L 55 205" stroke="#FFE600" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M 235 200 L 260 220 L 248 208" stroke="#FFE600" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* Top Line: "SESSION" */}
+      <text 
+        x="162" 
+        y="92" 
+        textAnchor="middle" 
+        fill="#000000" 
+        stroke="#000000" 
+        strokeWidth="10"
+        strokeLinejoin="round"
+        className="vfx-text-session-sub"
+      >
+        SESSION
+      </text>
+      <text 
+        x="160" 
+        y="90" 
+        textAnchor="middle" 
+        fill="#FFE600" 
+        stroke="#FF0044" 
+        strokeWidth="3"
+        className="vfx-text-session-sub"
+      >
+        SESSION
+      </text>
+      <text 
+        x="159" 
+        y="89" 
+        textAnchor="middle" 
+        fill="#FFFFFF" 
+        className="vfx-text-session-sub"
+      >
+        SESSION
+      </text>
+
+      {/* Bottom Line: "CRUSHED!" */}
+      <text 
+        x="163" 
+        y="148" 
+        textAnchor="middle" 
+        fill="#000000" 
+        stroke="#000000" 
+        strokeWidth="11"
+        strokeLinejoin="round"
+        className="vfx-text-session-main"
+      >
+        CRUSHED!
+      </text>
+      <text 
+        x="161" 
+        y="145" 
+        textAnchor="middle" 
+        fill="#FFE600" 
+        stroke="#FF0044" 
+        strokeWidth="3.2"
+        className="vfx-text-session-main"
+      >
+        CRUSHED!
+      </text>
+      <text 
+        x="160" 
+        y="144" 
+        textAnchor="middle" 
+        fill="#FFFFFF" 
+        className="vfx-text-session-main"
+      >
+        CRUSHED!
+      </text>
+    </svg>
+  </div>
+);
+
 // ==========================================
 // GLOBAL VFX OVERLAY HOST & PROVIDER
 // ==========================================
@@ -222,6 +323,7 @@ export const VFXProvider = ({ children }) => {
       id,
       tier: tierConfig.tier,
       text: tierConfig.text,
+      isSession: tierConfig.isSession || false,
       x,
       y,
       duration: tierConfig.duration
@@ -252,6 +354,9 @@ export const VFXProvider = ({ children }) => {
       {typeof document !== 'undefined' && createPortal(
         <div className="vfx-portal-container" aria-hidden="true">
           {vfxList.map(item => {
+            if (item.isSession || item.text.includes('SESSION')) {
+              return <SessionCrushedSVG key={item.id} x={item.x} y={item.y} />;
+            }
             if (item.tier === 1) {
               return <Tier1ThwipSVG key={item.id} text={item.text} x={item.x} y={item.y} />;
             }

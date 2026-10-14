@@ -189,19 +189,30 @@ function AppContent() {
     }));
   };
 
-  const completeSession = (week, dayData, event) => {
+  const completeSession = (week, dayData) => {
     triggerHaptic('burst');
     if (spawnVFX) {
-      const coords = event?.clientX ? { x: event.clientX, y: event.clientY } : null;
-      spawnVFX({ tier: 3, text: 'SESSION CRUSHED!', duration: 1100, screenShake: true }, coords);
+      // Center in viewport for maximum dramatic comic impact and perfect on-screen framing
+      const coords = { x: window.innerWidth / 2, y: window.innerHeight * 0.42 };
+      spawnVFX({ 
+        tier: 3, 
+        text: 'SESSION CRUSHED!', 
+        isSession: true,
+        duration: 2100, 
+        screenShake: true 
+      }, coords);
     }
     const newProgress = { ...progress };
     dayData.exercises.forEach((ex, idx) => {
       newProgress[`${week}-${dayData.day}-${idx}`] = true;
     });
     setProgress(newProgress);
-    setSelectedDay(null);
-    setSelectedWeek(null);
+
+    // Give user time to enjoy the full 2.1-second celebration before navigating back
+    setTimeout(() => {
+      setSelectedDay(null);
+      setSelectedWeek(null);
+    }, 1900);
   };
 
   const handleSelectWeek = (w) => {
