@@ -1,0 +1,2370 @@
+{
+  "programData": [
+    {
+      "week": 1,
+      "phase": "Accumulation",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Back squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.85,
+              "rpe": "7.5-8",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Back squat — back-off",
+              "sets": 4,
+              "reps": "4",
+              "percent": 0.7,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bulgarian split squat",
+              "sets": 3,
+              "reps": "10/leg"
+            },
+            {
+              "name": "Seated leg curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            },
+            {
+              "name": "Standing calf raise",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench press",
+              "sets": 6,
+              "reps": "4",
+              "percent": 0.7,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "6",
+              "rpe": 7
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 3,
+              "reps": "4",
+              "percent": 0.68,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 0,
+              "intensity": "60% est. 1RM",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Tempo bench (3-1-1)",
+              "sets": 4,
+              "reps": "4",
+              "percent": 0.65,
+              "rpe": "6-7",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "Paused squat",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.7,
+              "plus": 0,
+              "intensity": "70% TM",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 3,
+              "reps": "8"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 1,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "phase": "Accumulation",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Back squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.86,
+              "rpe": "7.5-8",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Back squat — back-off",
+              "sets": 5,
+              "reps": "4",
+              "percent": 0.73,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bulgarian split squat",
+              "sets": 3,
+              "reps": "10/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "20sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench press",
+              "sets": 7,
+              "reps": "4",
+              "percent": 0.73,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "6"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 3,
+              "reps": "4",
+              "percent": 0.72,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 5,
+              "intensity": "60% est. 1RM + 5 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Paused bench",
+              "sets": 4,
+              "reps": "3",
+              "percent": 0.7,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "Paused squat",
+              "sets": 3,
+              "reps": "5",
+              "percent": 0.7,
+              "plus": 5,
+              "intensity": "70% TM + 5 lb",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 3,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "phase": "Accumulation",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.87,
+              "rpe": "7.5-8",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 6,
+              "reps": "3",
+              "percent": 0.77,
+              "rpe": "7-8",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bulgarian split squat",
+              "sets": 3,
+              "reps": "8-10/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "30sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 7,
+              "reps": "4",
+              "percent": 0.76,
+              "rpe": "7-8",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "5"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 3,
+              "reps": "10-12"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 4,
+              "reps": "3",
+              "percent": 0.76,
+              "rpe": "7-8",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 10,
+              "intensity": "60% est. 1RM + 10 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Spoto press",
+              "sets": 4,
+              "reps": "4",
+              "percent": 0.6,
+              "rpe": "6-7",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "Paused squat",
+              "sets": 3,
+              "reps": "4",
+              "percent": 0.7,
+              "plus": 10,
+              "intensity": "70% TM + 10 lb",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 3,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "phase": "Accumulation Peak",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.87,
+              "rpe": "7.5-8",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 6,
+              "reps": "3",
+              "percent": 0.8,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bulgarian split squat",
+              "sets": 2,
+              "reps": "8/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 3,
+              "reps": "10-12"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "30sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 8,
+              "reps": "3",
+              "percent": 0.8,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "5"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 4,
+              "reps": "3",
+              "percent": 0.8,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 15,
+              "intensity": "60% est. 1RM + 15 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Tempo bench",
+              "sets": 4,
+              "reps": "3",
+              "percent": 0.65,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "10-12"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "Paused squat",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.7,
+              "plus": 15,
+              "intensity": "70% TM + 15 lb",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 3,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "phase": "Deload",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.6,
+              "rpe": "7-8 cap",
+              "notes": "Skip if slow or technically compromised",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Split squat",
+              "sets": 2,
+              "reps": "8/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 2,
+              "reps": "15sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 5,
+              "reps": "3",
+              "percent": 0.6,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 2,
+              "reps": "5"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Face pull",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 2,
+              "reps": "8/side"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.55,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.55,
+              "basis": "estMax",
+              "intensity": "55% est. 1RM — deload",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 1,
+              "reps": "6"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Light paused bench",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.55,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 2,
+              "reps": "10"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "Paused squat",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.55,
+              "intensity": "55% TM — deload",
+              "notes": "Easy deload; reduce fatigue",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "12"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "phase": "Intensification",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.9,
+              "rpe": "8 cap",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 5,
+              "reps": "3",
+              "percent": 0.83,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bulgarian split squat",
+              "sets": 3,
+              "reps": "8"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "20sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 7,
+              "reps": "3",
+              "percent": 0.83,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "5"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 3,
+              "reps": "8-10"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.82,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 25,
+              "intensity": "60% est. 1RM + 25 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Spoto press",
+              "sets": 4,
+              "reps": "3",
+              "percent": 0.65,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "10-12"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "Paused squat",
+              "sets": 3,
+              "reps": "4",
+              "percent": 0.7,
+              "plus": 20,
+              "intensity": "70% TM + 20 lb (resume progression)",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 3,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 7,
+      "phase": "Intensification",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.92,
+              "rpe": "8 cap",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 5,
+              "reps": "2",
+              "percent": 0.87,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Split squat",
+              "sets": 2,
+              "reps": "8/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "20sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 8,
+              "reps": "2",
+              "percent": 0.87,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "4-5"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 3,
+              "reps": "8"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 3,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 3,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 4,
+              "reps": "2",
+              "percent": 0.86,
+              "rpe": 8,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 30,
+              "intensity": "60% est. 1RM + 30 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "10-12"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "6-8"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Tempo bench",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.65,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 3,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "High-bar squat",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.75,
+              "plus": 0,
+              "intensity": "75% TM",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "10-12"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 3,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 8,
+      "phase": "Intensification",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.92,
+              "rpe": "8 cap",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 3,
+              "reps": "2",
+              "percent": 0.87,
+              "rpe": "8 cap",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Split squat",
+              "sets": 2,
+              "reps": "8/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "15-20sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 7,
+              "reps": "2",
+              "percent": 0.9,
+              "rpe": "8-9",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 3,
+              "reps": "4"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 2,
+              "reps": "8"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 2,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 3,
+              "reps": "2",
+              "percent": 0.89,
+              "rpe": "8-9",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 35,
+              "intensity": "60% est. 1RM + 35 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 2,
+              "reps": "6"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Paused bench",
+              "sets": 3,
+              "reps": "2",
+              "percent": 0.7,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 3,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 3,
+              "reps": "10"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 2,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "High-bar squat",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.75,
+              "plus": 5,
+              "intensity": "75% TM + 5 lb",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 9,
+      "phase": "Top of Intensification",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.92,
+              "rpe": "8 cap",
+              "notes": "Smooth single, no grind",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.87,
+              "rpe": "8 cap",
+              "notes": "Reduce if needed",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Split squat",
+              "sets": 2,
+              "reps": "8/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 3,
+              "reps": "15sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 6,
+              "reps": "2",
+              "percent": 0.88,
+              "rpe": "8-9",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 2,
+              "reps": "4"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 2,
+              "reps": "8"
+            },
+            {
+              "name": "Triceps pressdown",
+              "sets": 2,
+              "reps": "12"
+            },
+            {
+              "name": "Face pull",
+              "sets": 2,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.88,
+              "rpe": "8-9",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 40,
+              "intensity": "60% est. 1RM + 40 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "10"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 1,
+              "reps": "6"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Competition-style bench",
+              "sets": 3,
+              "reps": "2",
+              "percent": 0.83,
+              "rpe": "7-8",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Curl",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 2,
+              "reps": "10/side"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "High-bar squat",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.75,
+              "plus": 10,
+              "intensity": "75% TM + 10 lb",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "10"
+            },
+            {
+              "name": "GHR or Nordic curl",
+              "sets": 2,
+              "reps": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 10,
+      "phase": "Deload",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.6,
+              "rpe": "7-8 cap",
+              "notes": "Skip if slow or technically compromised",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 3,
+              "reps": "2",
+              "percent": 0.65,
+              "rpe": 6,
+              "notes": "Deload",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Split squat",
+              "sets": 2,
+              "reps": "6-8/leg"
+            },
+            {
+              "name": "Leg curl",
+              "sets": 2,
+              "reps": "8"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 2,
+              "reps": "15sec/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 5,
+              "reps": "2",
+              "percent": 0.65,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 2,
+              "reps": "5"
+            },
+            {
+              "name": "Incline DB press",
+              "sets": 2,
+              "reps": "8"
+            },
+            {
+              "name": "Face pull",
+              "sets": 2,
+              "reps": "15"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 2,
+              "reps": "8/side"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.6,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.55,
+              "basis": "estMax",
+              "intensity": "55% est. 1RM — deload",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Jefferson curl",
+              "sets": 1,
+              "reps": "6"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Light paused bench",
+              "sets": 3,
+              "reps": "2",
+              "percent": 0.6,
+              "rpe": 6,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 2,
+              "reps": "10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 2,
+              "reps": "12-15"
+            },
+            {
+              "name": "Curl",
+              "sets": 2,
+              "reps": "10"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "High-bar squat",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.6,
+              "intensity": "60% TM — deload",
+              "notes": "Easy deload; reduce fatigue",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 11,
+      "phase": "Peak / Realization",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.9,
+              "rpe": "8-9",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 2,
+              "reps": "1",
+              "percent": 0.82,
+              "rpe": "6-7",
+              "notes": "Crisp",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Copenhagen plank",
+              "sets": 2,
+              "reps": "15sec/side"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 2,
+              "reps": "8/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.9,
+              "rpe": "8-9 cap",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Bench — back-off",
+              "sets": 4,
+              "reps": "1",
+              "percent": 0.82,
+              "notes": "Crisp reps, stop if speed drops",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 2,
+              "reps": "3"
+            },
+            {
+              "name": "Face pull",
+              "sets": 2,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.88,
+              "rpe": "8-9",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 50,
+              "intensity": "60% est. 1RM + 50 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 2,
+              "reps": "10"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Competition-style bench",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.75,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 2,
+              "reps": "8-10"
+            },
+            {
+              "name": "Lateral raise",
+              "sets": 2,
+              "reps": "12-15"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "High-bar squat",
+              "sets": 2,
+              "reps": "2",
+              "percent": 0.75,
+              "plus": 15,
+              "intensity": "75% TM + 15 lb (resume progression)",
+              "rpe": "≤8",
+              "notes": "Clean reps; no grinding",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 12,
+      "phase": "Taper",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Monday — Squat",
+          "exercises": [
+            {
+              "name": "Squat — top single",
+              "sets": 1,
+              "reps": "1",
+              "percent": 0.8,
+              "rpe": "7 cap",
+              "notes": "Crisp only",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Squat — back-off",
+              "sets": 2,
+              "reps": "1",
+              "percent": 0.82,
+              "rpe": "6-7",
+              "notes": "Taper volume",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Pallof press",
+              "sets": 1,
+              "reps": "8/side"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Tuesday — Bench",
+          "exercises": [
+            {
+              "name": "Bench",
+              "sets": 5,
+              "reps": "1",
+              "percent": 0.85,
+              "rpe": "7-8",
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Close-grip bench",
+              "sets": 1,
+              "reps": "3",
+              "notes": "light"
+            },
+            {
+              "name": "Face pull",
+              "sets": 1,
+              "reps": "15"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Thursday — Deadlift",
+          "exercises": [
+            {
+              "name": "Deadlift",
+              "sets": 2,
+              "reps": "1",
+              "percent": 0.82,
+              "rpe": 7,
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "1.5-rep deadlift (knee height)",
+              "sets": 3,
+              "reps": "3",
+              "percent": 0.6,
+              "basis": "estMax",
+              "plus": 55,
+              "intensity": "60% est. 1RM + 55 lb",
+              "notes": "Reset every rep; lower to just below knee, return to lockout, then lower fully. W1 60% true DL max; add +5 lb/week only if clean and ≤RPE 7. Deload: 2x3 @55% true max.",
+              "isMain": true,
+              "lift": "deadlift"
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "10"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Friday — Bench variant / upper body",
+          "exercises": [
+            {
+              "name": "Bench lockout support",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.65,
+              "isMain": true,
+              "lift": "bench"
+            },
+            {
+              "name": "Lat pulldown",
+              "sets": 1,
+              "reps": "8"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Saturday — Squat variant + Bent-over row",
+          "exercises": [
+            {
+              "name": "High-bar squat",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.6,
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bent-over row",
+              "sets": 4,
+              "reps": "4-6",
+              "intensity": "RPE progression",
+              "notes": "4 strict sets. Add 5 lb next exposure only when every set is clean and ≤RPE 8; deload load/reps, no failure."
+            },
+            {
+              "name": "Reverse hyper",
+              "sets": 1,
+              "reps": "10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 13,
+      "phase": "Testing",
+      "days": [
+        {
+          "day": 1,
+          "notes": "Day 1 — Light activation",
+          "exercises": [
+            {
+              "name": "Squat activation",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.5,
+              "rpe": "≤5",
+              "notes": "Crisp only",
+              "isMain": true,
+              "lift": "squat"
+            },
+            {
+              "name": "Bench activation",
+              "sets": 2,
+              "reps": "3",
+              "percent": 0.5,
+              "rpe": "≤5",
+              "notes": "Crisp only",
+              "isMain": true,
+              "lift": "bench"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "notes": "Day 2 — Bench PR test",
+          "exercises": [
+            {
+              "name": "Bench PR attempts",
+              "sets": 3,
+              "reps": "1",
+              "percent": 0.9,
+              "basis": "oneRM",
+              "intensity": "Opener ~90% 1RM",
+              "notes": "Use current true 1RM, not TM. Opener ~90% current 1RM; next attempts only if clean.",
+              "isMain": true,
+              "lift": "bench"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "notes": "Day 3 — Rest",
+          "exercises": [
+            {
+              "name": "No lifting / recovery",
+              "isRest": true,
+              "notes": "Full rest; no loaded lifting."
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "notes": "Day 4 — Squat PR test",
+          "exercises": [
+            {
+              "name": "Squat PR attempts",
+              "sets": 3,
+              "reps": "1",
+              "percent": 0.9,
+              "basis": "oneRM",
+              "intensity": "Opener ~90% 1RM",
+              "notes": "Use current true 1RM, not TM. At least 48h after bench; no forced grinder.",
+              "isMain": true,
+              "lift": "squat"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "notes": "Day 5 — Rest / recovery",
+          "exercises": [
+            {
+              "name": "No lifting / recovery",
+              "isRest": true,
+              "notes": "Full rest; no loaded lifting."
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "notes": "Day 6 — Rest / full recovery",
+          "exercises": [
+            {
+              "name": "No lifting",
+              "isRest": true,
+              "notes": "Full rest before deadlift testing."
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "notes": "Day 7 — Rest / full recovery",
+          "exercises": [
+            {
+              "name": "No lifting",
+              "isRest": true,
+              "notes": "Full rest before deadlift testing."
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "notes": "Day 8 — Deadlift PR test",
+          "exercises": [
+            {
+              "name": "Deadlift PR attempts",
+              "sets": 3,
+              "reps": "1",
+              "percent": 0.9,
+              "basis": "oneRM",
+              "intensity": "Opener ~90% 1RM",
+              "notes": "Use current true 1RM, not TM. At least 72h after squat; opener ~90% true 1RM; attempt increases only if clean.",
+              "isMain": true,
+              "lift": "deadlift"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dayExplanations": {
+    "1-1": "The cycle opens with a top single at 85% TM. It's not a max test. It's a smooth, no-grind single at RPE 7.5-8 that gets you used to heavier weight on your back from day one. The 4x4 back-offs at 70% TM are the real volume work, kept well short of failure so you groove the pattern. Split squats and leg curls build the single-leg stability and hamstring strength that heavier squats will need later.",
+    "1-2": "Bench starts with 6x4 at 70% TM. That's more sets than squat because bench recovers faster and handles volume well. Close-grip bench and triceps work start building lockout strength for the heavier weeks. Face pulls keep the rear delts and rotator cuff balanced against all the pressing.",
+    "1-3": "Deadlift is the lightest main lift relative to TM (68%) because it costs the most recovery. The 1.5-rep deadlift from knee height starts at 60% of your estimated true max (TM ÷ 0.9). Each rep goes lockout → just below the knee → back to lockout → floor, with a reset every rep. This builds strength in the knee-to-lockout range under control. Only add the weekly 5 lb if every rep is clean and RPE 7 or lower.",
+    "1-4": "This is a second bench day, not a second heavy bench day. The 3-1-1 tempo at 65% keeps the weight light while you practice bar path and control. Pulldowns and arm work round out the upper body. Rowing has moved to Saturday as a heavy bent-over row.",
+    "1-5": "Paused squat at 70% TM builds strength in the bottom of the squat. From here it goes up a fixed 5 lb each week instead of following a percentage. The bent-over row replaces the old rack pull slot: 4 strict sets of 4-6, adding 5 lb next time only when every set is clean and RPE 8 or lower. Never row to failure.",
+    "2-1": "The top single goes up to 86% TM. The back-offs go to 5x4 at 73%: one more set and 3% more weight. This is the standard accumulation progression. Small, repeatable jumps let you pile up quality reps without a spike in fatigue.",
+    "2-2": "Bench goes to 7x4 at 73% TM, one more set and 3% more weight than Week 1. You should still finish each set with 2-3 reps in reserve.",
+    "2-3": "Deadlift goes up to 72% but stays at 3 sets. Deadlift doesn't get an extra set here because each set costs so much recovery. The 1.5-rep deadlift adds its first 5 lb. Only take the jump if last week's reps were clean and RPE 7 or lower.",
+    "2-4": "Paused bench replaces tempo bench as the lighter bench movement. It works a different skill (strength from a dead stop on the chest) at a similar easy weight, so this day doesn't get stale.",
+    "2-5": "Paused squat moves to 3x5 at base + 5 lb, which is the highest-rep week of this lift. The bent-over row keeps its 4x4-6 structure. The weight only goes up if last week was clean.",
+    "3-1": "The top single goes to 87% TM and stays there through Week 4. The back-offs switch to 6x3 at 77%. Reps per set drop but total weight lifted keeps climbing, which is how accumulation builds work capacity without RPE spiking.",
+    "3-2": "Bench stays at 7 sets but moves to 76% TM. RPE creeping to 7-8 is expected and fine. This is still submaximal work.",
+    "3-3": "Deadlift gets a 4th set for the first time (4x3 at 76%), placed mid-block once your body has had two weeks to adapt. The 1.5-rep deadlift is now base + 10 lb.",
+    "3-4": "Spoto press (pause an inch or two above the chest) targets the mid-range sticking point where most missed bench reps fail. It's introduced light (60%) so you get comfortable with it before it matters.",
+    "3-5": "Paused squat moves to 3x4 at base + 10 lb. The bent-over row keeps progressing only by the clean-and-RPE-8-or-lower rule.",
+    "4-1": "This is the hardest squat session of the accumulation block: a top single at 87% followed by 6x3 at 80%, RPE 8. Next week is a deload specifically because this week is designed to leave you fatigued.",
+    "4-2": "Bench volume peaks at 8x3 at 80% TM, RPE 8. That's the most bench sets in the program, and they're timed right before the deload so the fatigue has somewhere to go.",
+    "4-3": "4x3 at 80% is the heaviest deadlift session of the block. The 1.5-rep deadlift reaches base + 15 lb. If the main sets beat you up, hold the 1.5-rep weight instead of adding 5 lb. The progression rule always comes before the number.",
+    "4-4": "Tempo bench at 65% keeps this a lighter technique day. After Tuesday's 8 sets, this session should feel like recovery, not another hard push.",
+    "4-5": "Paused squat reaches its accumulation peak at base + 15 lb for 3x3. Fatigue is highest at the end of this week. If the row or the squat goes above RPE 8, don't add weight next time.",
+    "5-1": "Everything drops to about 60% TM. The top single at 60% is optional. Skip it if it feels slow or your technique is off. The point of this week is to let four weeks of fatigue clear so Week 6 starts rested. Don't push harder than prescribed. Cutting the deload short undermines the whole next block.",
+    "5-2": "Bench drops to 5x3 at 60% TM, RPE 6. The volume stays moderate but the weight is light enough to recover.",
+    "5-3": "Deadlift drops to 55% TM, the lightest of the three lifts, because deadlift builds up the most fatigue. The 1.5-rep deadlift drops to 2x3 at 55% of estimated true max.",
+    "5-4": "Light paused bench and only 2 sets of each accessory. This day should feel almost too easy, and that's correct.",
+    "5-5": "Paused squat drops to 2x3 at 55% TM. Rows keep going as an easy pattern day with lighter weight or fewer reps and no grinding.",
+    "6-1": "Intensification starts. The top single jumps to 90% TM, but it's capped at RPE 8. If it isn't smooth, don't push it. The back-offs drop to 5x3 at 83%. Because you're rested, RPE 8 here should feel similar to Week 4's RPE 8 even though the weight is heavier.",
+    "6-2": "Bench is 7x3 at 83% TM, RPE 8: fewer reps per set and heavier weight than the accumulation block.",
+    "6-3": "Deadlift drops to 3 sets (3x3 at 82%) as the weight goes up, protecting recovery. The 1.5-rep deadlift picks up at base + 25 lb. The deload week counts on the weekly calendar, so this is 5 weeks of progression from Week 1.",
+    "6-4": "Spoto press goes to 65% but stays a submaximal support day. This session's job is technique and upper-body support, not a new heavy weight.",
+    "6-5": "Paused squat resumes its progression at base + 20 lb for 3x4. This is its last week before the switch to high-bar squat.",
+    "7-1": "The top single moves to 92% TM, RPE 8 cap. Back-offs drop to doubles: 5x2 at 87%. This is where you start feeling real weight on the bar. Keep every rep crisp.",
+    "7-2": "Bench is 8x2 at 87% TM. Bench handles more sets at heavy weight than squat or deadlift, so it gets the most doubles.",
+    "7-3": "Deadlift is 4x2 at 86%. The 1.5-rep deadlift is now base + 30 lb, so watch the RPE 7 rule closely as the main lift gets heavy.",
+    "7-4": "Tempo bench at 65% returns as the lighter bench movement. This day's purpose hasn't changed: practice technique without adding to the week's fatigue.",
+    "7-5": "The secondary squat switches to high-bar squat starting at 75% TM for 3x3. High-bar puts more load on the quads with a more upright torso, building a different part of the squat than Monday's work. It adds 5 lb per week from here.",
+    "8-1": "The top single stays at 92% TM, but the back-offs drop to 3x2 at 87%, capped at RPE 8. As the weight gets heavy, rep quality matters more than total reps.",
+    "8-2": "Bench is 7x2 at 90% TM, RPE 8-9. This is the heaviest bench work of the program, close to what a competition attempt will feel like.",
+    "8-3": "Deadlift is 3x2 at 89%, RPE 8-9. That's 3 quality doubles at the heaviest deadlift weight so far, which is enough without hurting next week's recovery. The 1.5-rep deadlift is base + 35 lb.",
+    "8-4": "Paused bench at 70% and trimmed accessories. The week's real work already happened on Days 1-3.",
+    "8-5": "High-bar squat is base + 5 lb for 2x3. Volume drops as the main lifts get heavier.",
+    "9-1": "This is the final heavy exposure before the deload: the top single at 92% TM (RPE 8 cap), then only 2x2 at 87%. Cut the back-offs if needed. Protecting freshness for Weeks 11-13 matters more than finishing every rep here.",
+    "9-2": "Bench drops to 6x2 at 88% TM, RPE 8-9. Volume comes down from Week 8 so you arrive at the deload ready to recover.",
+    "9-3": "Deadlift is 2x2 at 88%, the fewest sets of the block, because it recovers slowest. The 1.5-rep deadlift reaches base + 40 lb. Skip the jump if the main doubles were a grind.",
+    "9-4": "Competition-style bench means pause, grip and setup exactly as you'll test. This is a technique rehearsal at a manageable 83%, not a heavy push.",
+    "9-5": "High-bar squat is base + 10 lb for 2x2. That's low volume, only enough to keep the progression going.",
+    "10-1": "This is the second deload. The top single at 60% TM is optional, so skip it if anything feels off. Back-offs are 3x2 at 65%, RPE 6. This week clears the fatigue from three weeks of heavy intensification before the peak.",
+    "10-2": "Bench drops to 5x2 at 65% TM, RPE 6. The intensity drop has the same purpose as the squat deload.",
+    "10-3": "Deadlift drops to 60% TM for 2x2. The 1.5-rep deadlift drops to 2x3 at 55% of estimated true max, matching the Week 5 deload.",
+    "10-4": "Light paused bench at 60% and minimal accessories. The only goal is blood flow and keeping the pattern sharp.",
+    "10-5": "High-bar squat drops to 2x2 at 60% TM, and rows are easy. By the end of this week you should feel noticeably fresher. If you don't, consider extra rest before Week 11 instead of pushing into it tired.",
+    "11-1": "Peak week starts with a true heavy single at 90% TM, RPE 8-9, then 2 crisp back-off singles at 82%, RPE 6-7. The singles keep your nervous system sharp without the fatigue of real volume.",
+    "11-2": "Bench now gets its own top single at 90% TM (RPE 8-9 cap), then 4 back-off singles at 82%. That's two more back-off sets than the original 2x1 because bench recovers fastest. Stop the back-offs if bar speed drops.",
+    "11-3": "One heavy deadlift single at 88%, RPE 8-9. The 1.5-rep deadlift continues at base + 50 lb for 3x3. Hold the weight or cut a set if the single was hard, because test week is close.",
+    "11-4": "Competition-style bench at 75%, lighter than Week 9's version. As testing gets closer, every non-peak day should get easier.",
+    "11-5": "High-bar squat resumes progression at base + 15 lb for 2x2. Rows continue, kept clean and well short of failure.",
+    "12-1": "Taper week. The top single is capped at RPE 7 (80% TM) and should be crisp only. The 2 back-off singles at 82% are taper volume at RPE 6-7. Note: the back-off singles are prescribed slightly heavier than the top single. Nothing here is a max effort. The goal is to stay sharp while fatigue drops.",
+    "12-2": "Bench is 5 singles at 85% TM, RPE 7-8. Intensity stays high so your nervous system stays sharp, while volume is low enough to arrive at test day fresh.",
+    "12-3": "Deadlift is 2 singles at 82%, RPE 7. The 1.5-rep deadlift reaches its last progression step at base + 55 lb. If it's anything above RPE 7, drop the weight. Freshness for test day comes first.",
+    "12-4": "Purely maintenance: light lockout work at 65% and one set of pulldowns. Nothing in this session should feel hard.",
+    "12-5": "High-bar squat at an easy 60% TM for 2x3, plus clean rows and reverse hypers. This is a touch, not a training stimulus.",
+    "13-1": "Squat and bench at 50% TM, RPE 5 or lower. This is just enough to wake up the patterns and confirm everything feels normal before the PR attempts.",
+    "13-2": "Bench is tested first because it recovers fastest. Attempts are based on your current true 1RM, not your TM. Open around 90% of your 1RM and only take the next attempt if the last one was clean.",
+    "13-3": "Full rest day. No loaded lifting, so squat testing gets at least 48 hours after the bench attempts.",
+    "13-4": "Squat PR attempts, based on your current true 1RM, at least 48 hours after bench. The opener shown is about 90% of your 1RM. Don't force a grinder. A clean PR beats a missed attempt.",
+    "13-5": "Rest day one of three before deadlift testing. Deadlift needs the most recovery of any lift.",
+    "13-6": "Rest day two. Full rest, no loaded lifting, so the fatigue from the squat test clears before you pull.",
+    "13-7": "Rest day three. This gives well over the minimum 72 hours between squat and deadlift testing.",
+    "13-8": "Deadlift PR attempts, the last test of the program. Open around 90% of your current true 1RM and only increase attempts if the last one was clean. The three rest days beforehand mean this number reflects your actual strength, not leftover fatigue from the squat test."
+  }
+}

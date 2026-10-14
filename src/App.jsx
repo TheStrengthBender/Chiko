@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
 import { programData } from './data/program';
 import { dayExplanations } from './data/explanations';
-import { Settings, Calendar, CheckCircle2, ChevronLeft, Dumbbell, Target, FileText, Info, SlidersHorizontal, X, TrendingUp, Calculator } from 'lucide-react';
+import { Settings, Calendar, CheckCircle2, ChevronLeft, Target, FileText, Info, SlidersHorizontal, X, TrendingUp, Calculator } from 'lucide-react';
 import './App.css';
 
 const MAXES_KEY = 'fourLift_maxes';
 const PROGRESS_KEY = 'fourLift_progress';
+const APP_VERSION_KEY = 'fourLift_version';
+const CURRENT_VERSION = 'strengthbender_system_v1';
+
+// Round to nearest 5 lb, matching Excel MROUND(x, 5). The epsilon guards against
+// floating-point results like 162.49999999 that Excel would treat as 162.5.
+const round5 = (x) => Math.round(x / 5 + 1e-9) * 5;
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -14,20 +20,33 @@ function App() {
   
   const [maxes, setMaxes] = useState(() => {
     const saved = localStorage.getItem(MAXES_KEY);
-    return saved ? JSON.parse(saved) : { squat: 335, bench: 225, deadlift: 410, rackPull: 0 };
+    return saved ? JSON.parse(saved) : { squat: 325, bench: 225, deadlift: 405 };
   });
 
   const [progress, setProgress] = useState(() => {
+    if (localStorage.getItem(APP_VERSION_KEY) !== CURRENT_VERSION) {
+      localStorage.setItem(APP_VERSION_KEY, CURRENT_VERSION);
+      localStorage.removeItem(PROGRESS_KEY);
+      localStorage.removeItem('fourLift_notes');
+      localStorage.removeItem('fourLift_adjustments');
+      return {};
+    }
     const saved = localStorage.getItem(PROGRESS_KEY);
     return saved ? JSON.parse(saved) : {};
   });
 
   const [sessionNotes, setSessionNotes] = useState(() => {
+    if (localStorage.getItem(APP_VERSION_KEY) !== CURRENT_VERSION) {
+      return {};
+    }
     const saved = localStorage.getItem('fourLift_notes');
     return saved ? JSON.parse(saved) : {};
   });
 
   const [adjustments, setAdjustments] = useState(() => {
+    if (localStorage.getItem(APP_VERSION_KEY) !== CURRENT_VERSION) {
+      return {};
+    }
     const saved = localStorage.getItem('fourLift_adjustments');
     return saved ? JSON.parse(saved) : {};
   });
@@ -55,16 +74,38 @@ function App() {
     localStorage.setItem('fourLift_adjustments', JSON.stringify(adjustments));
   }, [adjustments]);
 
-  const tms = {
-    squat: Math.round(maxes.squat * 0.90 / 5) * 5,
-    bench: Math.round(maxes.bench * 0.90 / 5) * 5,
-    deadlift: Math.round(maxes.deadlift * 0.90 / 5) * 5,
-    rackPull: maxes.rackPull > 0 ? maxes.rackPull : 0
-  };
-
   const handleMaxChange = (e) => {
     const { name, value } = e.target;
-    setMaxes(prev => ({ ...prev, [name]: Number(value) }));
+    const num = value === '' ? '' : Number(value);
+    setMaxes(prev => ({ ...prev, [name]: num }));
+  };
+
+  const handleResetProgress = () => {
+    if (window.confirm("Reset all workout progress back to 0%? This will clear all checked exercises, adjustments, and session notes.")) {
+      setProgress({});
+      setSessionNotes({});
+      setAdjustments({});
+      localStorage.removeItem(PROGRESS_KEY);
+      localStorage.removeItem('fourLift_notes');
+      localStorage.removeItem('fourLift_adjustments');
+    }
+  };
+
+  const getIntensityTag = (ex) => {
+    if (ex.intensity) {
+      return ex.intensity.replace(/\s*TM/g, '').replace(/\s*est\.\s*1RM/g, '').replace(/\s*1RM/g, '');
+    }
+    if (!ex.percent) return null;
+    return `${Math.round(ex.percent * 100)}%`;
+  };
+
+  const getCalcBreakdown = (ex) => {
+    if (!ex.percent || !ex.lift) return null;
+    const pct = Math.round(ex.percent * 100);
+    const maxVal = maxes[ex.lift] || 0;
+    const plus = ex.plus || 0;
+    const plusStr = plus ? ` + ${plus} lb` : '';
+    return `(${pct}% of ${maxVal} lb max${plusStr})`;
   };
 
   const toggleExercise = (week, day, exerciseIdx) => {
@@ -107,49 +148,94 @@ function App() {
 
   const renderSettings = () => (
     <div className="animate-fade">
-      <h2 className="text-gradient" style={{marginBottom: '24px'}}>Program Rules & Maxes</h2>
+      <h2 className="text-gradient" style={{marginBottom: '24px'}}>Your Maxes &amp; Rules</h2>
       
-      <div className="glass-panel" style={{marginBottom: '24px', background: 'rgba(250, 204, 21, 0.05)', borderColor: 'rgba(250, 204, 21, 0.3)'}}>
-        <h3 style={{fontSize: '1.1rem', color: 'var(--accent)', marginBottom: '12px', fontStyle: 'italic'}}>Establishing TM (Training Max)</h3>
+      {/* Informational Callout */}
+      <div className="glass-panel" style={{marginBottom: '24px', background: 'rgba(255, 0, 68, 0.06)', borderColor: 'rgba(255, 0, 68, 0.35)'}}>
+        <h3 style={{fontSize: '1.1rem', color: 'var(--accent)', marginBottom: '8px', fontStyle: 'italic'}}>Actual Maxes Based Programming</h3>
+        <p style={{fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 0}}>
+          All working weights and percentages are calculated directly from your actual entered maxes below (rounded to the nearest 5 lb).
+        </p>
+      </div>
+
+      {/* Program 2.0 Rules */}
+      <div className="glass-panel" style={{marginBottom: '24px', background: 'rgba(0, 240, 255, 0.05)', borderColor: 'rgba(0, 240, 255, 0.3)'}}>
+        <h3 style={{fontSize: '1.1rem', color: 'var(--spider-sense)', marginBottom: '12px', fontStyle: 'italic'}}>Program 2.0 Rules</h3>
         <ul style={{fontSize: '0.9rem', color: 'var(--text-secondary)', marginLeft: '20px', marginBottom: 0, lineHeight: 1.6}}>
-          <li style={{marginBottom: '8px'}}><strong>Squat / Bench / Deadlift:</strong> 90% of a true 1RM, OR 90% of an estimated 1RM from a recent AMRAP.</li>
-          <li><strong>Rack Pull:</strong> Set independently. Test or estimate a mid-shin rack pull max.</li>
+          <li style={{marginBottom: '8px'}}><strong>Squat top single:</strong> 85–87% of max in Weeks 1–4, 90–92% in Weeks 6–9, with back-off sets after.</li>
+          <li style={{marginBottom: '8px'}}><strong>1.5-rep deadlift (knee height):</strong> Starts at 60% of deadlift max and adds 5 lb/week only when clean and ≤RPE 7. Deloads: 2x3 @ 55% of max.</li>
+          <li style={{marginBottom: '8px'}}><strong>Secondary squat:</strong> Weeks 1–6 paused squat starts at 70% of max and adds 5 lb/week; Week 5 deload is 55%; Week 6 resumes at base +20 lb. Weeks 7–12 high-bar squat starts at 75% of max and adds 5 lb/week; Week 10 deload is 60%; Week 11 resumes at base +15 lb. Week 12 is an easy 60% taper.</li>
+          <li style={{marginBottom: '8px'}}><strong>Bent-over row:</strong> 4 strict sets of 4–6. Add 5 lb next exposure only when every set is clean and ≤RPE 8. No failure.</li>
+          <li><strong>Week 13 PR attempts:</strong> Opener ~90% of max; take subsequent attempts only if clean.</li>
         </ul>
       </div>
 
-      <div className="glass-panel" style={{marginBottom: '24px', background: 'rgba(255, 59, 48, 0.05)', borderColor: 'rgba(255, 59, 48, 0.3)'}}>
-        <h3 style={{fontSize: '1.1rem', color: '#ff453a', marginBottom: '12px', fontStyle: 'italic'}}>Autoregulation Rule</h3>
+      {/* Autoregulation Rule */}
+      <div className="glass-panel" style={{marginBottom: '24px', background: 'rgba(255, 0, 68, 0.05)', borderColor: 'rgba(255, 0, 68, 0.25)'}}>
+        <h3 style={{fontSize: '1.1rem', color: '#ff4d6d', marginBottom: '12px', fontStyle: 'italic'}}>Autoregulation Rule</h3>
         <p style={{fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: 0, lineHeight: 1.6}}>
           If the first working set of any top set comes up more than ~1 RPE point harder than prescribed, or bar speed clearly slows, <strong>drop the load ~5%</strong> and keep the prescribed sets/reps. Never grind a top set to hit a percentage.
         </p>
       </div>
+
+      <h3 style={{fontSize: '1.25rem', marginBottom: '16px', color: 'var(--text-primary)'}}>Enter Your Actual Maxes</h3>
       
-      <div className="glass-panel">
-        <div className="input-group">
-          <label className="input-label">Squat 1RM (lbs)</label>
-          <input type="number" name="squat" className="input-field" value={maxes.squat || ''} onChange={handleMaxChange} />
-          <div className="tm-display"><Target size={16} /> Training Max: {tms.squat} lbs</div>
-        </div>
-        
-        <div className="input-group">
-          <label className="input-label">Bench Press 1RM (lbs)</label>
-          <input type="number" name="bench" className="input-field" value={maxes.bench || ''} onChange={handleMaxChange} />
-          <div className="tm-display"><Target size={16} /> Training Max: {tms.bench} lbs</div>
-        </div>
-        
-        <div className="input-group">
-          <label className="input-label">Deadlift 1RM (lbs)</label>
-          <input type="number" name="deadlift" className="input-field" value={maxes.deadlift || ''} onChange={handleMaxChange} />
-          <div className="tm-display"><Target size={16} /> Training Max: {tms.deadlift} lbs</div>
-        </div>
-        
-        <div className="input-group" style={{marginTop: '32px', borderTop: '1px solid var(--border-light)', paddingTop: '24px'}}>
-          <label className="input-label">Paused Rack Pull TM (lbs)</label>
-          <p style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '12px', lineHeight: 1.4}}>
-            Enter manually based on a mid-shin rack pull max.
-          </p>
-          <input type="number" name="rackPull" className="input-field" value={maxes.rackPull || ''} onChange={handleMaxChange} />
-        </div>
+      <div className="lift-inputs-container" style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+        {[
+          { key: 'squat', title: 'Squat Max', placeholder: '325' },
+          { key: 'bench', title: 'Bench Press Max', placeholder: '225' },
+          { key: 'deadlift', title: 'Deadlift Max', placeholder: '405' }
+        ].map(lift => (
+          <div key={lift.key} className="glass-panel" style={{padding: '20px', borderLeft: '4px solid var(--accent)'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
+              <h4 style={{fontSize: '1.2rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)'}}>{lift.title}</h4>
+            </div>
+            
+            <div style={{maxWidth: '320px'}}>
+              <label className="input-label" style={{display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent)', marginBottom: '8px'}}>
+                <Target size={16} /> Enter Max (lbs)
+              </label>
+              <input 
+                type="number" 
+                step="5"
+                name={lift.key}
+                className="input-field" 
+                style={{borderColor: 'rgba(255, 0, 68, 0.35)', fontWeight: 800, fontSize: '1.4rem', color: '#fff'}}
+                value={maxes[lift.key] ?? ''} 
+                onChange={handleMaxChange} 
+                placeholder={lift.placeholder}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Reset Progress Section */}
+      <div className="glass-panel" style={{marginTop: '32px', borderColor: 'rgba(255, 0, 68, 0.35)', background: 'rgba(255, 0, 68, 0.05)'}}>
+        <h4 style={{fontSize: '1.1rem', color: '#ff4d6d', marginBottom: '8px', fontWeight: 800}}>Reset Program Progress</h4>
+        <p style={{fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.5}}>
+          Clear all completed checkmarks, recorded set adjustments, and session notes back to a clean 0% state. Your entered maxes will remain intact.
+        </p>
+        <button 
+          onClick={handleResetProgress}
+          style={{
+            background: 'rgba(255, 0, 68, 0.15)',
+            border: '1px solid var(--accent)',
+            color: '#fff',
+            padding: '10px 18px',
+            borderRadius: 'var(--radius-sm)',
+            fontWeight: 800,
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            transition: 'var(--transition-fast)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em'
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'var(--accent)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 0, 68, 0.15)'}
+        >
+          Reset All Progress
+        </button>
       </div>
     </div>
   );
@@ -176,9 +262,9 @@ function App() {
       <div className="animate-fade">
         <div className="progress-container">
           <div className="progress-header">
-            <span className="progress-title">Power Level</span>
-            <span className="progress-percent" style={progressPercent === 100 ? {color: 'var(--success)', textShadow: '0 0 15px var(--success)'} : {}}>
-              {progressPercent === 100 ? 'OVER 9000!' : `${progressPercent}%`}
+            <span className="progress-title">Venom Charge</span>
+            <span className="progress-percent" style={progressPercent === 100 ? {color: 'var(--venom)', textShadow: '0 0 15px var(--venom-glow)'} : {}}>
+              {progressPercent === 100 ? 'MAX VENOM BLAST!' : `${progressPercent}%`}
             </span>
           </div>
           <div className="progress-track">
@@ -258,24 +344,24 @@ function App() {
     </div>
   );
 
+  // All exercise weights calculate directly from the user's entered maxes
   const calculateWeight = (exercise) => {
     if (!exercise.percent) return null;
     const liftRef = exercise.lift;
-    if (!liftRef || !tms[liftRef]) return null;
-    
-    const tmWeight = tms[liftRef];
-    const weight = Math.round((tmWeight * exercise.percent) / 5) * 5;
-    return weight;
+    if (!liftRef || !maxes[liftRef]) return null;
+
+    const baseMax = maxes[liftRef];
+    const plus = exercise.plus || 0;
+    return round5(baseMax * exercise.percent) + plus;
   };
 
-  const parseDefaultRPE = (rpeStr) => {
-    if (!rpeStr) return 7;
-    if (typeof rpeStr === 'number') return rpeStr;
-    if (rpeStr.includes('-')) {
-      const parts = rpeStr.split('-');
-      return (Number(parts[0]) + Number(parts[1])) / 2;
-    }
-    return Number(rpeStr) || 7;
+  // Averages the numbers in an RPE prescription: 7 -> 7, "7-8" -> 7.5, "≤8" -> 8, "8 cap" -> 8
+  const parseDefaultRPE = (rpeVal) => {
+    if (!rpeVal) return 7;
+    if (typeof rpeVal === 'number') return rpeVal;
+    const nums = String(rpeVal).match(/\d+(\.\d+)?/g);
+    if (!nums) return 7;
+    return nums.reduce((sum, n) => sum + Number(n), 0) / nums.length;
   };
 
   const handleAdjustmentChange = (exKey, field, value) => {
@@ -372,34 +458,49 @@ function App() {
     let completedLifts = 0;
     let riskIndicators = 0;
     
-    let currentMaxWeek = 0;
-    let currentMaxDay = 0;
-    Object.keys(progress).forEach(key => {
-      if (progress[key]) {
-        const [wStr, dStr, idxStr] = key.split('-');
-        const w = parseInt(wStr, 10);
-        const d = parseInt(dStr, 10);
-        if (w > currentMaxWeek || (w === currentMaxWeek && d > currentMaxDay)) {
-          currentMaxWeek = w;
-          currentMaxDay = d;
-        }
-      }
+    // Find the furthest week and day reached FOR THIS SPECIFIC LIFT
+    let maxLiftWeek = 0;
+    let maxLiftDay = 0;
+
+    programData.forEach(weekData => {
+      weekData.days.forEach(dayData => {
+        dayData.exercises.forEach((ex, idx) => {
+          if (ex.isMain && ex.lift === liftRef) {
+            const exKey = `${weekData.week}-${dayData.day}-${idx}`;
+            if (progress[exKey] || adjustments[exKey]?.weight) {
+              if (weekData.week > maxLiftWeek || (weekData.week === maxLiftWeek && dayData.day > maxLiftDay)) {
+                maxLiftWeek = weekData.week;
+                maxLiftDay = dayData.day;
+              }
+            }
+          }
+        });
+      });
     });
 
-    if (currentMaxWeek === 0) {
-      return { trend: 'stable', sessionCompletion: 100, fatigueState: 'normal', riskIndicators: 0, improvingRate: 0.5 };
+    if (maxLiftWeek === 0) {
+      return { 
+        trend: 'stable', 
+        sessionCompletion: 100, 
+        fatigueState: 'normal', 
+        riskIndicators: 0, 
+        improvingRate: 0.5,
+        historicalLifts: [],
+        completedLifts: 0,
+        programmedLifts: 0
+      };
     }
 
     const historicalLifts = [];
     programData.forEach(weekData => {
-      if (weekData.week > currentMaxWeek) return;
+      if (weekData.week > maxLiftWeek) return;
       weekData.days.forEach(dayData => {
-        if (weekData.week === currentMaxWeek && dayData.day > currentMaxDay) return;
+        if (weekData.week === maxLiftWeek && dayData.day > maxLiftDay) return;
         dayData.exercises.forEach((ex, idx) => {
           if (ex.isMain && ex.lift === liftRef) {
             programmedLifts++;
             const exKey = `${weekData.week}-${dayData.day}-${idx}`;
-            const isDone = progress[exKey];
+            const isDone = !!progress[exKey];
             if (isDone) completedLifts++;
             
             const defWeight = calculateWeight(ex);
@@ -407,10 +508,21 @@ function App() {
             const actWeight = adjustments[exKey]?.weight ?? defWeight;
             const actRpe = adjustments[exKey]?.rpe ?? defRpe;
             
-            if (actWeight < defWeight) riskIndicators++;
+            // Risk indicator: count only for completed lifts where actual weight was dropped below programmed
+            if (isDone && defWeight > 0 && actWeight < defWeight) {
+              riskIndicators++;
+            }
             
             if (isDone) {
-              historicalLifts.push({ week: weekData.week, defWeight, actWeight, defRpe, actRpe });
+              historicalLifts.push({ 
+                week: weekData.week, 
+                day: dayData.day, 
+                name: ex.name,
+                defWeight, 
+                actWeight, 
+                defRpe, 
+                actRpe 
+              });
             }
           }
         });
@@ -425,6 +537,7 @@ function App() {
       const avgRpeDelta = last3.reduce((sum, l) => sum + (l.actRpe - l.defRpe), 0) / 3;
       if (avgRpeDelta >= 1.0) fatigueState = 'high';
       else if (avgRpeDelta >= 0.5) fatigueState = 'recovery';
+      else if (avgRpeDelta <= -0.5) fatigueState = 'fresh';
     }
 
     let trend = 'stable';
@@ -440,18 +553,38 @@ function App() {
         trend = 'improving';
         improvingRate = 1.0;
       }
+    } else if (historicalLifts.length >= 2) {
+      const last2 = historicalLifts.slice(-2);
+      const avgWeightDelta = last2.reduce((sum, l) => sum + (l.actWeight - l.defWeight), 0) / 2;
+      const avgRpeDelta = last2.reduce((sum, l) => sum + (l.actRpe - l.defRpe), 0) / 2;
+      if (avgWeightDelta < -2 || avgRpeDelta >= 1.0) {
+        trend = 'declining';
+      } else if (avgWeightDelta > 2 || avgRpeDelta <= -0.5) {
+        trend = 'improving';
+        improvingRate = 0.8;
+      }
     }
 
-    return { trend, sessionCompletion, fatigueState, riskIndicators, improvingRate };
+    return { 
+      trend, 
+      sessionCompletion, 
+      fatigueState, 
+      riskIndicators, 
+      improvingRate,
+      historicalLifts,
+      completedLifts,
+      programmedLifts
+    };
   };
 
   const calculateProjection = (lift) => {
     const projState = autoAnalyzeLift(lift);
     const currentMax = maxes[lift];
-    if (!currentMax) return { base: 0, min: 0, max: 0, conf: 0, projState };
+    if (!currentMax) return { base: 0, min: 0, max: 0, conf: 0, opener: 0, targetPR: 0, stretchPR: 0, projState };
     
+    // 13-week adaptation projection
     let adaptationRate = 0.005; 
-    if (projState.trend === 'declining') adaptationRate = 0;
+    if (projState.trend === 'declining') adaptationRate = 0.001;
     else if (projState.trend === 'improving' && projState.improvingRate) adaptationRate = projState.improvingRate / 100;
     
     let baseE1RM = currentMax * Math.pow((1 + adaptationRate), 13);
@@ -467,22 +600,33 @@ function App() {
       baseE1RM = baseE1RM * 0.98;
     } else if (projState.fatigueState === 'recovery') {
       confidence -= 5;
+    } else if (projState.fatigueState === 'fresh') {
+      confidence += 5;
     }
     
     confidence -= (projState.riskIndicators * 5);
-    confidence = Math.max(0, Math.min(100, confidence));
+    confidence = Math.max(10, Math.min(99, confidence));
     
     let spread = 0.02;
-    spread += ((100 - confidence) / 100) * 0.05;
+    spread += ((100 - confidence) / 100) * 0.04;
     
-    const minE1RM = Math.round(baseE1RM * (1 - spread));
-    const maxE1RM = Math.round(baseE1RM * (1 + spread));
+    const baseVal = round5(baseE1RM);
+    const minE1RM = round5(baseE1RM * (1 - spread));
+    const maxE1RM = round5(baseE1RM * (1 + spread));
+
+    // Week 13 Attempt Strategy
+    const opener = round5(baseVal * 0.90);
+    const targetPR = baseVal;
+    const stretchPR = Math.max(targetPR + 5, round5(baseVal * 1.025));
     
     return {
-      base: Math.round(baseE1RM),
+      base: baseVal,
       min: minE1RM,
       max: maxE1RM,
       conf: Math.round(confidence),
+      opener,
+      targetPR,
+      stretchPR,
       projState
     };
   };
@@ -497,7 +641,7 @@ function App() {
         <h2 className="text-gradient" style={{marginBottom: '24px'}}>13-Week Projections</h2>
         
         <div style={{display: 'flex', gap: '8px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '8px'}}>
-          {['squat', 'bench', 'deadlift', 'rackPull'].map(l => (
+          {['squat', 'bench', 'deadlift'].map(l => (
             <button 
               key={l}
               onClick={() => setActiveProjLift(l)}
@@ -509,52 +653,53 @@ function App() {
                 border: 'none',
                 fontWeight: 'bold',
                 textTransform: 'capitalize',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                cursor: 'pointer'
               }}
             >
-              {l === 'rackPull' ? 'Rack Pull' : l}
+              {l}
             </button>
           ))}
         </div>
 
-        <div className="glass-panel" style={{marginBottom: '24px', background: 'linear-gradient(145deg, rgba(20,20,20,0.8) 0%, rgba(30,30,30,0.9) 100%)'}}>
+        <div className="glass-panel" style={{marginBottom: '24px', background: 'linear-gradient(145deg, rgba(16,18,28,0.85) 0%, rgba(10,12,18,0.95) 100%)', borderTop: '1px solid var(--accent)'}}>
           <div style={{textAlign: 'center', marginBottom: '16px'}}>
-            <div style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '2px'}}>Current 1RM</div>
+            <div style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '2px'}}>Current Max</div>
             <div style={{fontSize: '2rem', fontWeight: 900, color: '#fff'}}>{currMax || 0} <span style={{fontSize: '1rem', color: 'var(--text-secondary)'}}>lbs</span></div>
           </div>
           
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '16px'}}>
             <div style={{height: '2px', flex: 1, background: 'var(--accent)', opacity: 0.3}}></div>
-            <div style={{color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.2rem'}}>13 Weeks</div>
+            <div style={{color: 'var(--venom)', fontWeight: 'bold', fontSize: '1.2rem', textShadow: '0 0 8px var(--venom-glow)'}}>13 Weeks</div>
             <div style={{height: '2px', flex: 1, background: 'var(--accent)', opacity: 0.3}}></div>
           </div>
           
           <div style={{textAlign: 'center', marginBottom: '24px'}}>
-            <div style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '2px'}}>Projected 1RM</div>
-            <div style={{fontSize: '3rem', fontWeight: 900, color: 'var(--accent)', textShadow: '0 0 20px rgba(250, 204, 21, 0.4)'}}>{result.base} <span style={{fontSize: '1.5rem', color: 'var(--text-secondary)'}}>lbs</span></div>
-            <div style={{fontSize: '1.1rem', color: 'var(--text-primary)', marginTop: '8px'}}>Range: {result.min} - {result.max} lbs</div>
+            <div style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '2px'}}>Projected 13-Week Max</div>
+            <div style={{fontSize: '3rem', fontWeight: 900, color: 'var(--venom)', textShadow: '0 0 20px var(--venom-glow), 0 0 35px var(--accent-glow)'}}>{result.base} <span style={{fontSize: '1.5rem', color: 'var(--text-secondary)'}}>lbs</span></div>
+            <div style={{fontSize: '1.1rem', color: 'var(--text-primary)', marginTop: '8px'}}>Expected Range: {result.min} – {result.max} lbs</div>
           </div>
           
-          <div style={{background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: 'var(--radius-sm)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <div style={{background: 'rgba(0,0,0,0.4)', padding: '16px', borderRadius: 'var(--radius-sm)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.06)'}}>
             <span style={{fontWeight: 'bold', color: 'var(--text-secondary)'}}>Confidence Score</span>
             <span style={{
               fontWeight: 900, 
               fontSize: '1.2rem',
-              color: result.conf > 80 ? 'var(--success)' : (result.conf > 50 ? 'var(--accent)' : 'var(--danger)')
+              color: result.conf > 80 ? 'var(--spider-sense)' : (result.conf > 50 ? 'var(--venom)' : 'var(--accent)')
             }}>{result.conf}%</span>
           </div>
         </div>
 
         <h3 style={{fontSize: '1.2rem', marginBottom: '16px', marginTop: '32px'}}>Automated Analytics</h3>
         
-        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '80px'}}>
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px'}}>
           <div className="glass-panel" style={{padding: '16px', background: 'rgba(255,255,255,0.03)'}}>
             <div style={{fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px'}}>30-Day Trend</div>
             <div style={{
               fontSize: '1.2rem', 
               fontWeight: '900', 
               textTransform: 'capitalize', 
-              color: projState.trend === 'improving' ? 'var(--success)' : (projState.trend === 'declining' ? 'var(--danger)' : 'var(--text-primary)'),
+              color: projState.trend === 'improving' ? 'var(--spider-sense)' : (projState.trend === 'declining' ? 'var(--accent)' : 'var(--text-primary)'),
               marginTop: '4px'
             }}>{projState.trend}</div>
           </div>
@@ -564,9 +709,12 @@ function App() {
             <div style={{
               fontSize: '1.2rem', 
               fontWeight: '900', 
-              color: projState.sessionCompletion >= 90 ? 'var(--success)' : 'var(--danger)',
+              color: projState.sessionCompletion >= 90 ? 'var(--venom)' : 'var(--accent)',
               marginTop: '4px'
             }}>{Math.round(projState.sessionCompletion)}%</div>
+            <div style={{fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px'}}>
+              {projState.completedLifts} of {projState.programmedLifts} main sets
+            </div>
           </div>
           
           <div className="glass-panel" style={{padding: '16px', background: 'rgba(255,255,255,0.03)'}}>
@@ -575,7 +723,7 @@ function App() {
               fontSize: '1.2rem', 
               fontWeight: '900', 
               textTransform: 'capitalize', 
-              color: projState.fatigueState === 'high' ? 'var(--danger)' : (projState.fatigueState === 'recovery' ? 'var(--accent)' : 'var(--success)'),
+              color: projState.fatigueState === 'high' ? 'var(--accent)' : (projState.fatigueState === 'recovery' ? 'var(--venom)' : 'var(--spider-sense)'),
               marginTop: '4px'
             }}>{projState.fatigueState}</div>
           </div>
@@ -585,12 +733,69 @@ function App() {
             <div style={{
               fontSize: '1.2rem', 
               fontWeight: '900', 
-              color: projState.riskIndicators > 0 ? 'var(--danger)' : 'var(--success)',
+              color: projState.riskIndicators > 0 ? 'var(--accent)' : 'var(--spider-sense)',
               marginTop: '4px'
             }}>{projState.riskIndicators} <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500}}>Events</span></div>
           </div>
         </div>
-        
+
+        {/* Week 13 Attempt Strategy */}
+        <h3 style={{fontSize: '1.2rem', marginBottom: '16px', marginTop: '28px'}}>Week 13 Attempt Strategy</h3>
+        <div className="glass-panel" style={{marginBottom: '28px', background: 'rgba(255, 255, 255, 0.02)'}}>
+          <p style={{fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.5}}>
+            Target attempts calibrated for your Week 13 Testing Day based on progression and readiness:
+          </p>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px'}}>
+            <div style={{background: 'rgba(0, 240, 255, 0.06)', padding: '12px 8px', borderRadius: 'var(--radius-sm)', textAlign: 'center', border: '1px solid rgba(0, 240, 255, 0.3)'}}>
+              <div style={{fontSize: '0.75rem', color: 'var(--spider-sense)', textTransform: 'uppercase', fontWeight: 700}}>Opener</div>
+              <div style={{fontSize: '1.3rem', fontWeight: 900, color: 'var(--spider-sense)', marginTop: '4px'}}>{result.opener} <span style={{fontSize: '0.75rem'}}>lb</span></div>
+              <div style={{fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '2px'}}>~90% / Smooth</div>
+            </div>
+            <div style={{background: 'rgba(255, 230, 0, 0.08)', padding: '12px 8px', borderRadius: 'var(--radius-sm)', textAlign: 'center', border: '1px solid rgba(255, 230, 0, 0.35)'}}>
+              <div style={{fontSize: '0.75rem', color: 'var(--venom)', textTransform: 'uppercase', fontWeight: 700}}>Target PR</div>
+              <div style={{fontSize: '1.3rem', fontWeight: 900, color: 'var(--venom)', marginTop: '4px'}}>{result.targetPR} <span style={{fontSize: '0.75rem'}}>lb</span></div>
+              <div style={{fontSize: '0.7rem', color: 'rgba(255, 230, 0, 0.8)', marginTop: '2px'}}>Projected Max</div>
+            </div>
+            <div style={{background: 'rgba(255, 0, 68, 0.08)', padding: '12px 8px', borderRadius: 'var(--radius-sm)', textAlign: 'center', border: '1px solid rgba(255, 0, 68, 0.35)'}}>
+              <div style={{fontSize: '0.75rem', color: 'var(--accent)', textTransform: 'uppercase', fontWeight: 700}}>Stretch Goal</div>
+              <div style={{fontSize: '1.3rem', fontWeight: 900, color: 'var(--accent)', marginTop: '4px'}}>{result.stretchPR} <span style={{fontSize: '0.75rem'}}>lb</span></div>
+              <div style={{fontSize: '0.7rem', color: 'rgba(255, 0, 68, 0.8)', marginTop: '2px'}}>Clean PR +</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Completed Session History */}
+        <h3 style={{fontSize: '1.2rem', marginBottom: '16px', marginTop: '28px'}}>Session History ({activeProjLift.toUpperCase()})</h3>
+        <div style={{marginBottom: '80px'}}>
+          {projState.historicalLifts.length === 0 ? (
+            <div className="glass-panel" style={{textAlign: 'center', padding: '24px', color: 'var(--text-secondary)'}}>
+              <p style={{marginBottom: 0, fontSize: '0.9rem'}}>No completed sessions yet for {activeProjLift}. Check off workouts in the Plan tab to track real-time trends.</p>
+            </div>
+          ) : (
+            <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+              {projState.historicalLifts.slice(-5).reverse().map((hist, i) => (
+                <div key={i} className="glass-panel" style={{padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)'}}>
+                  <div>
+                    <div style={{fontWeight: 'bold', fontSize: '0.95rem', color: '#fff'}}>
+                      Week {hist.week} &bull; Day {hist.day}
+                    </div>
+                    <div style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '2px'}}>
+                      {hist.name}
+                    </div>
+                  </div>
+                  <div style={{textAlign: 'right'}}>
+                    <div style={{fontWeight: 900, fontSize: '1.05rem', color: 'var(--accent)'}}>
+                      {hist.actWeight} <span style={{fontSize: '0.8rem', color: 'var(--text-secondary)'}}>lbs</span>
+                    </div>
+                    <div style={{fontSize: '0.75rem', color: hist.actRpe > hist.defRpe ? 'var(--danger)' : 'var(--success)'}}>
+                      RPE {hist.actRpe} {hist.actRpe !== hist.defRpe && `(Target: ${hist.defRpe})`}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     );
   };
@@ -641,7 +846,7 @@ function App() {
         )}
 
         {dayData.notes && (
-          <div className="glass-panel" style={{marginBottom: '1.5rem', padding: '16px 20px', background: 'rgba(250, 204, 21, 0.08)', borderColor: 'rgba(250, 204, 21, 0.2)'}}>
+          <div className="glass-panel" style={{marginBottom: '1.5rem', padding: '16px 20px', background: 'rgba(255, 0, 68, 0.08)', borderColor: 'rgba(255, 0, 68, 0.3)'}}>
             <p style={{fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 500, lineHeight: 1.5}}>{dayData.notes}</p>
           </div>
         )}
@@ -651,13 +856,13 @@ function App() {
             const exKey = `${week}-${dayData.day}-${idx}`;
             const isDone = progress[exKey];
             const defaultWeight = calculateWeight(ex);
-            const defaultRpe = parseDefaultRPE(ex.rpe);
             
             const displayWeight = adjustments[exKey]?.weight ?? defaultWeight;
             const displayRpe = adjustments[exKey]?.rpe ?? ex.rpe;
+            const intensityTag = getIntensityTag(ex);
+            const calcBreakdown = getCalcBreakdown(ex);
             
             const isEditing = editingEx === exKey;
-            const isCalcOpen = calcOpenEx === exKey;
             
             return (
               <div key={idx} className={`exercise-item ${isDone ? 'completed' : ''} ${ex.isMain ? 'main-lift' : ''}`}>
@@ -686,12 +891,24 @@ function App() {
                     </div>
                     
                     <div className="exercise-meta">
+                      {ex.isRest && <span className="tag tag-accent">Rest day</span>}
                       {ex.sets && ex.reps && <span className="tag tag-accent">{ex.sets} × {ex.reps}</span>}
-                      {ex.percent && <span className="tag">{(ex.percent * 100).toFixed(0)}%</span>}
+                      {intensityTag && <span className="tag">{intensityTag}</span>}
                       {displayRpe && <span className="tag">RPE {displayRpe}</span>}
                     </div>
                     
-                    {displayWeight > 0 && <div className="exercise-weight">{displayWeight} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 600}}>lbs</span></div>}
+                    {displayWeight > 0 && (
+                      <div style={{marginTop: '6px'}}>
+                        <div className="exercise-weight">
+                          {displayWeight} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 600}}>lbs</span>
+                        </div>
+                        {calcBreakdown && (
+                          <div className="exercise-calc-subtext">
+                            {calcBreakdown}
+                          </div>
+                        )}
+                      </div>
+                    )}
                     
                     {ex.notes && <div className="exercise-notes">{ex.notes}</div>}
                   </div>
@@ -713,7 +930,7 @@ function App() {
             width: '100%', 
             padding: '16px', 
             marginTop: '24px', 
-            background: 'linear-gradient(90deg, var(--accent) 0%, var(--success) 100%)', 
+            background: 'linear-gradient(90deg, #ff0044 0%, #ff1744 50%, #ffe600 100%)', 
             color: '#000', 
             border: 'none', 
             borderRadius: 'var(--radius-md)', 
@@ -721,7 +938,7 @@ function App() {
             fontWeight: 900, 
             fontStyle: 'italic', 
             textTransform: 'uppercase',
-            boxShadow: '0 4px 15px var(--success-glow)',
+            boxShadow: '0 4px 20px rgba(255, 0, 68, 0.5), 0 0 15px rgba(255, 230, 0, 0.3)',
             cursor: 'pointer'
           }}
         >
@@ -764,10 +981,15 @@ function App() {
 
           {defaultWeight > 0 && (
             <div className="slider-group" style={{marginBottom: '24px'}}>
-              <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px', alignItems: 'flex-end'}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '8px', alignItems: 'flex-end'}}>
                 <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px'}}>Weight</span>
                 <span style={{fontWeight: 900, color: 'var(--accent)', fontSize: '1.5rem'}}>{displayWeight} <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)'}}>lbs</span></span>
               </div>
+              {getCalcBreakdown(ex) && (
+                <div style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '10px'}}>
+                  Programmed: {defaultWeight} lbs {getCalcBreakdown(ex)}
+                </div>
+              )}
               <input 
                 type="range" 
                 className="custom-slider" 
@@ -828,7 +1050,12 @@ function App() {
 
           <div style={{textAlign: 'center', marginBottom: '24px', paddingRight: '24px', paddingLeft: '24px'}}>
             <h3 style={{color: '#fff', fontSize: '1.2rem', marginBottom: '8px', lineHeight: 1.3}}>{ex.name}</h3>
-            <div style={{color: 'var(--accent)', fontSize: '2.5rem', fontWeight: 900, textShadow: '0 0 15px rgba(250, 204, 21, 0.3)'}}>{displayWeight} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 600}}>lbs</span></div>
+            <div style={{color: 'var(--accent)', fontSize: '2.5rem', fontWeight: 900, textShadow: '0 0 15px var(--accent-glow)'}}>{displayWeight} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 600}}>lbs</span></div>
+            {getCalcBreakdown(ex) && (
+              <div style={{color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '4px', fontWeight: 500}}>
+                {getCalcBreakdown(ex)}
+              </div>
+            )}
           </div>
 
           <h4 style={{color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px'}}>Top Set Plate Loading (Per Side)</h4>
@@ -837,9 +1064,9 @@ function App() {
             {calculatePlates(displayWeight).length > 0 && <div style={{color: 'var(--text-secondary)', fontWeight: 'bold'}}>+</div>}
             {calculatePlates(displayWeight).map((p, i) => (
               <div key={i} style={{
-                background: p.weight === 45 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.05)', 
-                color: p.weight === 45 ? '#fca5a5' : 'inherit', 
-                border: p.weight === 45 ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255,255,255,0.1)', 
+                background: p.weight === 45 ? 'rgba(255, 0, 68, 0.25)' : 'rgba(255,255,255,0.05)', 
+                color: p.weight === 45 ? '#ff4d6d' : 'inherit', 
+                border: p.weight === 45 ? '1px solid rgba(255, 0, 68, 0.45)' : '1px solid rgba(255,255,255,0.1)', 
                 padding: '8px 12px', 
                 borderRadius: 'var(--radius-sm)', 
                 fontSize: '0.9rem', 
@@ -855,12 +1082,12 @@ function App() {
             {generateWarmups(displayWeight, ex.lift).map((w, i) => (
               <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px 16px', borderRadius: 'var(--radius-sm)'}}>
                 <span style={{fontSize: '0.9rem', color: 'var(--text-secondary)'}}>Step {i + 1}</span>
-                <span style={{fontWeight: 'bold', fontSize: '1rem', color: '#fff'}}>{w.weight} <span style={{fontSize: '0.8rem', color: 'var(--text-secondary)'}}>lbs</span> <span style={{color: 'var(--accent)', marginLeft: '12px'}}>× {w.reps}</span></span>
+                <span style={{fontWeight: 'bold', fontSize: '1rem', color: '#fff'}}>{w.weight} <span style={{fontSize: '0.8rem', color: 'var(--text-secondary)'}}>lbs</span> <span style={{color: 'var(--venom)', marginLeft: '12px'}}>× {w.reps}</span></span>
               </div>
             ))}
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(250, 204, 21, 0.15)', border: '1px solid rgba(250, 204, 21, 0.3)', padding: '12px 16px', borderRadius: 'var(--radius-sm)', marginTop: '4px', boxShadow: '0 0 15px rgba(250, 204, 21, 0.1)'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 0, 68, 0.15)', border: '1px solid rgba(255, 0, 68, 0.35)', padding: '12px 16px', borderRadius: 'var(--radius-sm)', marginTop: '4px', boxShadow: '0 0 15px rgba(255, 0, 68, 0.2)'}}>
               <span style={{fontSize: '0.9rem', color: 'var(--accent)', fontWeight: 'bold'}}>Top Set</span>
-              <span style={{fontWeight: '900', fontSize: '1.1rem', color: '#fff'}}>{displayWeight} <span style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)'}}>lbs</span> <span style={{color: 'var(--accent)', marginLeft: '12px'}}>× {ex.reps}</span></span>
+              <span style={{fontWeight: '900', fontSize: '1.1rem', color: '#fff'}}>{displayWeight} <span style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)'}}>lbs</span> <span style={{color: 'var(--venom)', marginLeft: '12px'}}>× {ex.reps}</span></span>
             </div>
           </div>
           
@@ -869,11 +1096,71 @@ function App() {
     );
   };
 
+  const renderSpiderWebs = () => (
+    <div className="spiderweb-bg" aria-hidden="true">
+      {/* Top Right Corner Spider-Man Web */}
+      <svg className="web-corner-tr" viewBox="0 0 350 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="350" y1="0" x2="0" y2="0" stroke="rgba(255, 0, 68, 0.45)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="0" y2="70" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="0" y2="150" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="0" y2="250" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="0" y2="350" stroke="rgba(255, 0, 68, 0.5)" strokeWidth="1.4" />
+        <line x1="350" y1="0" x2="100" y2="350" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="200" y2="350" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="280" y2="350" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="350" y1="0" x2="350" y2="350" stroke="rgba(255, 0, 68, 0.45)" strokeWidth="1.2" />
+
+        <path d="M 300 0 Q 300 35 350 50" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" fill="none" />
+        <path d="M 250 0 Q 255 70 350 100" stroke="rgba(255, 255, 255, 0.28)" strokeWidth="1.2" fill="none" />
+        <path d="M 200 0 Q 210 110 350 150" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" fill="none" />
+        <path d="M 150 0 Q 165 155 350 200" stroke="rgba(255, 255, 255, 0.28)" strokeWidth="1.2" fill="none" />
+        <path d="M 100 0 Q 120 200 350 250" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" fill="none" />
+        <path d="M 50 0 Q 75 250 350 300" stroke="rgba(255, 255, 255, 0.28)" strokeWidth="1.2" fill="none" />
+        <path d="M 0 0 Q 30 300 350 350" stroke="rgba(255, 0, 68, 0.5)" strokeWidth="1.4" fill="none" />
+        <path d="M 0 100 Q 60 320 280 350" stroke="rgba(255, 255, 255, 0.22)" strokeWidth="1" fill="none" />
+        <path d="M 0 200 Q 90 335 200 350" stroke="rgba(255, 0, 68, 0.3)" strokeWidth="1" fill="none" />
+      </svg>
+
+      {/* Bottom Left Corner Spider-Man Web */}
+      <svg className="web-corner-bl" viewBox="0 0 350 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="350" x2="350" y2="350" stroke="rgba(255, 0, 68, 0.45)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="350" y2="280" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="350" y2="200" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="350" y2="100" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="350" y2="0" stroke="rgba(255, 0, 68, 0.5)" strokeWidth="1.4" />
+        <line x1="0" y1="350" x2="250" y2="0" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="150" y2="0" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="70" y2="0" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" />
+        <line x1="0" y1="350" x2="0" y2="0" stroke="rgba(255, 0, 68, 0.45)" strokeWidth="1.2" />
+
+        <path d="M 50 350 Q 50 315 0 300" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" fill="none" />
+        <path d="M 100 350 Q 95 280 0 250" stroke="rgba(255, 255, 255, 0.28)" strokeWidth="1.2" fill="none" />
+        <path d="M 150 350 Q 140 240 0 200" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" fill="none" />
+        <path d="M 200 350 Q 185 195 0 150" stroke="rgba(255, 255, 255, 0.28)" strokeWidth="1.2" fill="none" />
+        <path d="M 250 350 Q 230 150 0 100" stroke="rgba(255, 0, 68, 0.4)" strokeWidth="1.2" fill="none" />
+        <path d="M 300 350 Q 275 100 0 50" stroke="rgba(255, 255, 255, 0.28)" strokeWidth="1.2" fill="none" />
+        <path d="M 350 350 Q 320 50 0 0" stroke="rgba(255, 0, 68, 0.5)" strokeWidth="1.4" fill="none" />
+        <path d="M 350 250 Q 290 30 70 0" stroke="rgba(255, 255, 255, 0.22)" strokeWidth="1" fill="none" />
+        <path d="M 350 150 Q 260 15 150 0" stroke="rgba(255, 0, 68, 0.3)" strokeWidth="1" fill="none" />
+      </svg>
+
+      {/* Subtle Spider-Man Background Web Strands */}
+      <svg className="web-strands" viewBox="0 0 1000 1000" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 0 180 Q 400 260 1000 140" stroke="rgba(255, 0, 68, 0.22)" strokeWidth="1" fill="none" />
+        <path d="M 0 520 Q 600 580 1000 460" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" fill="none" />
+        <path d="M 0 820 Q 500 760 1000 890" stroke="rgba(255, 0, 68, 0.25)" strokeWidth="1" fill="none" />
+        <path d="M 280 0 Q 320 500 240 1000" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1" fill="none" strokeDasharray="6 4" />
+        <path d="M 750 0 Q 700 500 790 1000" stroke="rgba(255, 0, 68, 0.18)" strokeWidth="1" fill="none" strokeDasharray="8 6" />
+      </svg>
+    </div>
+  );
+
   return (
     <>
+      {renderSpiderWebs()}
       <div style={{marginBottom: '2rem', marginTop: '1rem', textAlign: 'center'}}>
         <h1 className="app-title">Chiko_lifts</h1>
-        <p className="text-secondary" style={{fontSize: '0.95rem', fontWeight: 500}}>The 13-Week StrengthBender System</p>
+        <p className="text-secondary" style={{fontSize: '0.92rem', fontWeight: 700, letterSpacing: '0.05em', color: 'rgba(255, 255, 255, 0.8)'}}>StrengthBender System</p>
       </div>
 
       <main className="main-content">

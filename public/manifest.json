@@ -1,14 +1,14 @@
 {
-  "name": "StrengthBender System",
-  "short_name": "StrengthBender",
-  "description": "The 13-Week StrengthBender PR Tracker",
-  "start_url": "/",
+  "name": "Chiko_Lifts — StrengthBender System",
+  "short_name": "Chiko_Lifts",
+  "description": "The 13-Week Powerlifting System — StrengthBender Edition",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#050B14",
-  "theme_color": "#050B14",
+  "background_color": "#07080C",
+  "theme_color": "#07080C",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
