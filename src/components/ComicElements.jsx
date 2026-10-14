@@ -83,8 +83,8 @@ export const CrackedWebDetail = () => (
   </svg>
 );
 
-// Massive Comic-Book Action Starburst (KAPOW shape) for active/selected week (e.g. W11)
-export const KapowStarburst = ({ weekNum = 11, phase = 'PEAK / REALIZATION', isJittering = false, onClick }) => (
+// Massive Comic-Book Action Starburst (KAPOW shape) for active/selected week (e.g. W13)
+export const KapowStarburst = ({ weekNum = 13, phase = 'TESTING', isJittering = false, onClick }) => (
   <div className={`kapow-starburst-container ${isJittering ? 'jittering' : ''}`} onClick={onClick}>
     {/* Electric lightning sparks around starburst */}
     <svg className="starburst-lightning-glow" viewBox="0 0 200 200" fill="none">

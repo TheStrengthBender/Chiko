@@ -28,7 +28,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedWeek, setSelectedWeek] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [featuredWeek] = useState(11); // Showcase active week KAPOW starburst
+  const [featuredWeek] = useState(13); // Showcase active week KAPOW starburst
   const [tappingWeek, setTappingWeek] = useState(null); // Week jitter on tap
   const [flaringDay, setFlaringDay] = useState(null); // Day border flashbulb flare
   const [justCompletedEx, setJustCompletedEx] = useState(null); // Exercise check burst
@@ -335,7 +335,7 @@ function App() {
           Select a week to view and track your training.
         </p>
 
-        {/* Grid with W11 Action Starburst & Corner Webs */}
+        {/* Grid with W13 Action Starburst & Corner Webs */}
         <div className="week-grid">
           {programData.map((w, idx) => {
             const completed = isWeekCompleted(w);
