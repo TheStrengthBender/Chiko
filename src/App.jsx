@@ -520,11 +520,15 @@ function AppContent() {
   };
 
   // Averages the numbers in an RPE prescription: 7 -> 7, "7-8" -> 7.5, "≤8" -> 8, "8 cap" -> 8
-  const parseDefaultRPE = (rpeVal) => {
-    if (!rpeVal) return 7;
+  const parseDefaultRPE = (rpeVal, notes) => {
+    if (!rpeVal) {
+      if (notes && notes.includes('RPE 8')) return 8;
+      if (notes && notes.includes('RPE 7')) return 7;
+      return 8;
+    }
     if (typeof rpeVal === 'number') return rpeVal;
     const nums = String(rpeVal).match(/\d+(\.\d+)?/g);
-    if (!nums) return 7;
+    if (!nums) return 8;
     return nums.reduce((sum, n) => sum + Number(n), 0) / nums.length;
   };
 
@@ -1052,8 +1056,10 @@ function AppContent() {
             const isDone = progress[exKey];
             const defaultWeight = calculateWeight(ex, week);
             
+            const isRow = ex.name && (ex.name.toLowerCase().includes('bent-over row') || ex.name.toLowerCase().includes('bent over row'));
+            const targetRpe = ex.rpe || (ex.notes?.includes('RPE 8') ? '8' : (ex.notes?.includes('RPE 7') ? '7' : '8'));
             const displayWeight = adjustments[exKey]?.weight ?? defaultWeight;
-            const displayRpe = adjustments[exKey]?.rpe ?? ex.rpe;
+            const displayRpe = adjustments[exKey]?.rpe ?? ex.rpe ?? targetRpe;
             const intensityTag = getIntensityTag(ex);
             const calcBreakdown = getCalcBreakdown(ex, week);
             
@@ -1095,7 +1101,7 @@ function AppContent() {
                       )}
                     </div>
                     
-                    {/* Badges (Sets / Reps / RPE) in pill containers */}
+                    {/* Badges (Sets / Reps / RPE) in pill containers - ALWAYS VISIBLE ON ALL EXERCISES */}
                     <div className="comic-badges-row">
                       {ex.isRest && <span className="comic-badge-sets">REST DAY</span>}
                       {ex.sets && ex.reps && (
@@ -1104,39 +1110,115 @@ function AppContent() {
                       {intensityTag && (
                         <span className="comic-badge-intensity">{intensityTag}</span>
                       )}
-                      {displayRpe && (
-                        <span className="comic-badge-rpe">RPE {displayRpe}</span>
+                      {!ex.isRest && (
+                        <span 
+                          className={`comic-badge-rpe ${adjustments[exKey]?.rpe ? 'custom' : ''}`}
+                          onClick={(e) => { e.stopPropagation(); setEditingEx(exKey); }}
+                          style={{cursor: 'pointer'}}
+                          title="Tap to adjust RPE"
+                        >
+                          RPE {displayRpe}
+                          <span style={{fontSize: '0.65rem', marginLeft: '4px', opacity: 0.7}}>✎</span>
+                        </span>
                       )}
                     </div>
                     
-                    {/* Target Load: Massively upscaled, bold, italic, bright red ("285") with smaller white "lbs" */}
+                    {/* Target Load / Weight Section - ALWAYS VISIBLE ON ALL EXERCISES */}
                     {displayWeight > 0 ? (
-                      <div style={{marginTop: '4px'}}>
-                        <div className="comic-load-container">
-                          <span className="comic-weight-num">{displayWeight}</span>
-                          <span className="comic-weight-unit">lbs</span>
-                        </div>
-                        {calcBreakdown && (
-                          <div className="comic-calc-subtext">
-                            {calcBreakdown}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      !ex.isRest && (
-                        <div style={{marginTop: '6px'}}>
-                          <button 
-                            type="button"
-                            className="comic-add-weight-hint"
-                            onClick={(e) => { e.stopPropagation(); setEditingEx(exKey); }}
+                      <div style={{marginTop: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px'}}>
+                        <div>
+                          <div 
+                            className="comic-load-container" 
+                            onClick={() => setEditingEx(exKey)}
+                            title="Tap to adjust load & RPE"
+                            style={{cursor: 'pointer'}}
                           >
-                            <SlidersHorizontal size={13} /> Log Weight &amp; RPE
-                          </button>
+                            <span className="comic-weight-num">{displayWeight}</span>
+                            <span className="comic-weight-unit">lbs</span>
+                            <span className="comic-load-edit-icon"><SlidersHorizontal size={13} /></span>
+                          </div>
                           {calcBreakdown && (
                             <div className="comic-calc-subtext">
                               {calcBreakdown}
                             </div>
                           )}
+                        </div>
+
+                        {/* Quick +/- 5 lb Stepper Controls right on the card */}
+                        <div className="comic-quick-stepper">
+                          <button 
+                            type="button"
+                            className="comic-card-step-btn" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const current = Number(displayWeight);
+                              handleAdjustmentChange(exKey, 'weight', Math.max(0, current - 5));
+                            }}
+                            title="Quick -5 lbs"
+                          >
+                            -5
+                          </button>
+                          <button 
+                            type="button"
+                            className="comic-card-step-btn" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const current = Number(displayWeight);
+                              handleAdjustmentChange(exKey, 'weight', current + 5);
+                            }}
+                            title="Quick +5 lbs"
+                          >
+                            +5
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      !ex.isRest && (
+                        <div style={{marginTop: '8px'}}>
+                          <div className="comic-inline-log-bar">
+                            <div className="comic-inline-log-title" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px'}}>
+                              <span style={{color: '#ffe600', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 800}}>
+                                {isRow ? '⚡ Bent-Over Row Base:' : 'Log Weight:'}
+                              </span>
+                              <span style={{color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: 600}}>
+                                Target RPE {displayRpe}
+                              </span>
+                            </div>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                              <input 
+                                type="number" 
+                                step="5" 
+                                placeholder={isRow ? "W1 lbs" : "Weight lbs"} 
+                                className="comic-inline-input"
+                                onClick={(e) => e.stopPropagation()}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    const val = Number(e.currentTarget.value);
+                                    if (val > 0) handleAdjustmentChange(exKey, 'weight', val);
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  const val = Number(e.target.value);
+                                  if (val > 0) handleAdjustmentChange(exKey, 'weight', val);
+                                }}
+                              />
+                              <button 
+                                type="button"
+                                className="comic-inline-log-btn"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingEx(exKey);
+                                }}
+                              >
+                                <SlidersHorizontal size={13} /> {isRow ? 'Set W1 Load' : 'Log Load & RPE'}
+                              </button>
+                            </div>
+                            {calcBreakdown && (
+                              <div className="comic-calc-subtext" style={{marginTop: '6px'}}>
+                                {calcBreakdown}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )
                     )}
@@ -1219,7 +1301,7 @@ function AppContent() {
     const sliderMax = Math.max(300, currentWeightNum > 0 ? currentWeightNum + 90 : 250);
 
     return (
-      <div className="modal-overlay animate-fade" onClick={() => setEditingEx(null)} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'}}>
+      <div className="modal-overlay animate-fade" onClick={() => setEditingEx(null)} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(8px)', zIndex: 100000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', paddingBottom: '90px'}}>
         <div className="glass-panel" onClick={e => e.stopPropagation()} style={{width: '100%', maxWidth: '420px', background: 'linear-gradient(145deg, rgba(15,20,30,0.97) 0%, rgba(5,10,20,0.99) 100%)', border: '1px solid var(--accent)', padding: '22px', position: 'relative', boxShadow: '0 10px 40px rgba(0,0,0,0.9)', maxHeight: '90vh', overflowY: 'auto'}}>
           
           <button onClick={() => setEditingEx(null)} style={{position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer'}}>
@@ -1390,7 +1472,15 @@ function AppContent() {
             )}
             <button 
               type="button"
-              onClick={() => setEditingEx(null)}
+              onClick={() => {
+                if (displayWeight !== '' && adjustments[editingEx]?.weight === undefined) {
+                  handleAdjustmentChange(editingEx, 'weight', Number(displayWeight));
+                }
+                if (adjustments[editingEx]?.rpe === undefined && displayRpe) {
+                  handleAdjustmentChange(editingEx, 'rpe', Number(displayRpe));
+                }
+                setEditingEx(null);
+              }}
               style={{
                 flex: 2, 
                 padding: '12px', 
@@ -1431,7 +1521,7 @@ function AppContent() {
     const displayWeight = adjustments[calcOpenEx]?.weight ?? defaultWeight;
 
     return (
-      <div className="modal-overlay animate-fade" onClick={() => setCalcOpenEx(null)} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'}}>
+      <div className="modal-overlay animate-fade" onClick={() => setCalcOpenEx(null)} style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', zIndex: 100000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', paddingBottom: '90px'}}>
         <div className="glass-panel" onClick={e => e.stopPropagation()} style={{width: '100%', maxWidth: '400px', background: 'linear-gradient(145deg, rgba(15,20,30,0.95) 0%, rgba(5,10,20,0.98) 100%)', border: '1px solid var(--accent)', padding: '24px', position: 'relative', boxShadow: '0 10px 40px rgba(0,0,0,0.8)'}}>
           
           <button onClick={() => setCalcOpenEx(null)} style={{position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer'}}>

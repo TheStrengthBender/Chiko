@@ -1749,5 +1749,114 @@ button:active,
   box-shadow: 0 0 10px rgba(255, 230, 0, 0.6);
 }
 
+/* Quick Steppers on Exercise Card */
+.comic-quick-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.comic-card-step-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.comic-card-step-btn:hover {
+  background: rgba(255, 0, 68, 0.2);
+  border-color: #ff0044;
+  color: #ff0044;
+}
+
+.comic-card-step-btn:active {
+  transform: scale(0.92);
+}
+
+.comic-load-edit-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  color: #a0a0a0;
+  opacity: 0.6;
+  transition: opacity 0.14s ease, color 0.14s ease;
+}
+
+.comic-load-container:hover .comic-load-edit-icon {
+  opacity: 1;
+  color: #ff0044;
+}
+
+/* Inline Logger Bar for Unlogged Exercises */
+.comic-inline-log-bar {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1.5px dashed rgba(255, 0, 68, 0.35);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  transition: all 0.15s ease;
+}
+
+.comic-inline-log-bar:hover {
+  border-color: rgba(255, 0, 68, 0.65);
+  background: rgba(255, 0, 68, 0.05);
+}
+
+.comic-inline-input {
+  width: 100px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1.5px solid rgba(255, 0, 68, 0.45);
+  border-radius: 6px;
+  color: #ff0044;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 6px 10px;
+  outline: none;
+  transition: all 0.14s ease;
+}
+
+.comic-inline-input:focus {
+  border-color: #ff0044;
+  box-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
+  color: #ffffff;
+}
+
+.comic-inline-log-btn {
+  background: linear-gradient(135deg, rgba(255, 0, 68, 0.2) 0%, rgba(255, 230, 0, 0.12) 100%);
+  border: 1px solid rgba(255, 0, 68, 0.5);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.14s ease;
+}
+
+.comic-inline-log-btn:hover {
+  background: #ff0044;
+  color: #000000;
+  border-color: #ff0044;
+  box-shadow: 0 0 12px rgba(255, 0, 68, 0.6);
+}
+
+.comic-badge-rpe.custom {
+  border-color: #ffe600 !important;
+  color: #ffe600 !important;
+  box-shadow: 0 0 8px rgba(255, 230, 0, 0.35);
+}
+
+
 
 
