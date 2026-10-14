@@ -588,14 +588,11 @@ h3 {
 
 .comic-day-card {
   position: relative;
-  background: #121522;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1.2px, transparent 1.2px);
-  background-size: 9px 9px;
   border-radius: 12px;
   padding: 20px 22px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .comic-day-card:hover {
@@ -604,14 +601,43 @@ h3 {
 
 /* Day 1: Crimson Red Neon Glow */
 .comic-day-card.glow-red {
-  border: 2px solid #ff0044;
-  box-shadow: 0 0 16px rgba(255, 0, 68, 0.5), 0 4px 16px rgba(0, 0, 0, 0.8), inset 0 0 12px rgba(255, 0, 68, 0.08);
+  background: 
+    radial-gradient(rgba(255, 255, 255, 0.055) 1.2px, transparent 1.2px) 0 0 / 9px 9px padding-box,
+    linear-gradient(#111420, #0c0f18) padding-box,
+    linear-gradient(135deg, #ff0044 0%, #ff1744 50%, #d60036 100%) border-box;
+  border: 2px solid transparent;
+  box-shadow: 
+    0 0 18px rgba(255, 0, 68, 0.55), 
+    0 4px 16px rgba(0, 0, 0, 0.85), 
+    inset 0 0 10px rgba(255, 0, 68, 0.08);
 }
 
-/* Days 2-5: Transitioning into Cyan / Blue Neon Glow */
-.comic-day-card.glow-cyan {
-  border: 2px solid #00f0ff;
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.45), 0 4px 16px rgba(0, 0, 0, 0.8), inset 0 0 12px rgba(0, 240, 255, 0.08);
+.comic-day-card.glow-red:hover {
+  box-shadow: 
+    0 0 26px rgba(255, 0, 68, 0.8), 
+    0 6px 20px rgba(0, 0, 0, 0.9);
+}
+
+/* Days 2-5: Spider-Verse Red-to-Cyan Outline Gradient (Red Left -> Cyan Right) */
+.comic-day-card.glow-cyan,
+.comic-day-card.glow-gradient {
+  background: 
+    radial-gradient(rgba(255, 255, 255, 0.055) 1.2px, transparent 1.2px) 0 0 / 9px 9px padding-box,
+    linear-gradient(#111420, #0c0f18) padding-box,
+    linear-gradient(90deg, #ff0044 0%, #ff0055 18%, #7e00b8 48%, #00aaff 78%, #00f0ff 100%) border-box;
+  border: 2px solid transparent;
+  box-shadow: 
+    -6px 0 18px rgba(255, 0, 68, 0.5),
+    6px 0 22px rgba(0, 240, 255, 0.55),
+    0 4px 16px rgba(0, 0, 0, 0.85);
+}
+
+.comic-day-card.glow-cyan:hover,
+.comic-day-card.glow-gradient:hover {
+  box-shadow: 
+    -8px 0 24px rgba(255, 0, 68, 0.7),
+    8px 0 28px rgba(0, 240, 255, 0.75),
+    0 6px 20px rgba(0, 0, 0, 0.9);
 }
 
 .comic-day-title {
@@ -1216,17 +1242,16 @@ button:active,
   }
 }
 
-@keyframes flashbulbCyan {
+@keyframes flashbulbGradient {
   0% {
-    box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+    box-shadow: -6px 0 18px rgba(255, 0, 68, 0.5), 6px 0 22px rgba(0, 240, 255, 0.55);
   }
   50% {
-    box-shadow: 0 0 45px rgba(0, 240, 255, 1), 0 0 22px #ffffff;
-    border-color: #ffffff;
+    box-shadow: -12px 0 40px rgba(255, 0, 68, 1), 12px 0 45px rgba(0, 240, 255, 1), 0 0 25px #ffffff;
     transform: scale(1.02);
   }
   100% {
-    box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+    box-shadow: -6px 0 18px rgba(255, 0, 68, 0.5), 6px 0 22px rgba(0, 240, 255, 0.55);
     transform: scale(1);
   }
 }
@@ -1235,8 +1260,9 @@ button:active,
   animation: flashbulbRed 0.1s steps(2, end) forwards;
 }
 
-.comic-day-card.flaring-cyan {
-  animation: flashbulbCyan 0.1s steps(2, end) forwards;
+.comic-day-card.flaring-cyan,
+.comic-day-card.flaring-gradient {
+  animation: flashbulbGradient 0.1s steps(2, end) forwards;
 }
 
 /* Speech Bubble Pop */

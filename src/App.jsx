@@ -401,8 +401,11 @@ function App() {
               className={`comic-day-card ${glowClass} ${flareClass}`} 
               onClick={() => handleSelectDay(weekData.week, day)}
             >
-              <div className="comic-day-title">Day {day.day}</div>
-              <div className="comic-day-subtext">{dayFocus}</div>
+              <CornerWeb position="top-right" size={120} opacity={0.22} color="rgba(255, 255, 255, 0.4)" />
+              <div style={{position: 'relative', zIndex: 2}}>
+                <div className="comic-day-title">Day {day.day}</div>
+                <div className="comic-day-subtext">{dayFocus}</div>
+              </div>
             </div>
           );
         })}
