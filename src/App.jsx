@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { programData } from './data/program';
 import { dayExplanations } from './data/explanations';
-import { Settings, Calendar, CheckCircle2, ChevronLeft, Target, FileText, Info, SlidersHorizontal, X, TrendingUp, Calculator } from 'lucide-react';
+import { Settings, Calendar, CheckCircle2, ChevronLeft, Target, FileText, Info, SlidersHorizontal, X, TrendingUp, Calculator, Download, FileSpreadsheet } from 'lucide-react';
 import { 
   CornerWeb, 
   VenomLightningAura, 
@@ -140,6 +140,61 @@ function AppContent() {
       localStorage.removeItem(NOTES_KEY);
       localStorage.removeItem(ADJUSTMENTS_KEY);
     }
+  };
+
+  const handleExportCSV = () => {
+    triggerHaptic('tick');
+    const headers = [
+      'Week', 'Phase', 'Day', 'Session Focus', 'Ex #', 'Exercise', 'Type', 'Lift',
+      'Sets', 'Reps', '% 1RM', 'Prescribed Load (lbs)', 'Logged Load (lbs)', 'Target RPE', 'Logged RPE',
+      'Completed', 'Session Notes'
+    ];
+    const rows = [headers];
+
+    programData.forEach(w => {
+      w.days.forEach(d => {
+        const dayKey = `${w.week}-${d.day}`;
+        const dayNote = sessionNotes[dayKey] || '';
+        d.exercises.forEach((ex, idx) => {
+          const exKey = `${w.week}-${d.day}-${idx}`;
+          const isDone = !!progress[exKey];
+          const defWeight = calculateWeight(ex, w.week) || '';
+          const actWeight = adjustments[exKey]?.weight ?? '';
+          const defRpe = ex.rpe || '';
+          const actRpe = adjustments[exKey]?.rpe ?? '';
+          const pct = ex.percent ? `${Math.round(ex.percent * 100)}%` : '';
+
+          rows.push([
+            w.week,
+            w.phase,
+            d.day,
+            d.notes || `Day ${d.day}`,
+            idx + 1,
+            ex.name,
+            ex.isMain ? 'Main Lift' : (ex.isRest ? 'Rest' : 'Accessory'),
+            ex.lift ? ex.lift.toUpperCase() : '',
+            ex.sets ?? '',
+            ex.reps ?? '',
+            pct,
+            defWeight,
+            actWeight,
+            defRpe,
+            actRpe,
+            isDone ? 'YES' : 'NO',
+            dayNote.replace(/"/g, '""')
+          ]);
+        });
+      });
+    });
+
+    const csvContent = "data:text/csv;charset=utf-8," + rows.map(r => r.map(val => `"${val}"`).join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "StrengthBender_13_Week_Program_Logged.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getIntensityTag = (ex) => {
@@ -361,6 +416,96 @@ function AppContent() {
         ))}
       </div>
 
+      {/* Downloadable Spreadsheets & Export */}
+      <div className="glass-panel" style={{marginTop: '32px', borderColor: 'rgba(0, 240, 255, 0.4)', background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(15, 23, 42, 0.85) 100%)', position: 'relative', overflow: 'hidden'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px'}}>
+          <FileSpreadsheet size={24} color="var(--spider-sense)" />
+          <h4 style={{fontSize: '1.2rem', color: '#fff', margin: 0, fontWeight: 900, fontStyle: 'italic'}}>Download Full Program Spreadsheet</h4>
+        </div>
+        <p style={{fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '18px', lineHeight: 1.5}}>
+          Export the complete 13-week training system with dynamic formulas linked directly to your 1RMs, full coaching rationale for all 68 sessions, plate loading matrix, and the official Week 13 peaking schedule.
+        </p>
+
+        <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+          <a 
+            href={`${import.meta.env.BASE_URL}StrengthBender_13_Week_Program.xlsx`}
+            download="StrengthBender_13_Week_Program.xlsx"
+            onClick={() => triggerHaptic('heavy')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'linear-gradient(90deg, #0284C7 0%, #0369A1 100%)',
+              color: '#fff',
+              padding: '14px 18px',
+              borderRadius: 'var(--radius-sm)',
+              fontWeight: 800,
+              fontSize: '0.95rem',
+              textDecoration: 'none',
+              boxShadow: '0 4px 14px rgba(2, 132, 199, 0.4)',
+              letterSpacing: '0.02em',
+              transition: 'transform 0.15s ease'
+            }}
+          >
+            <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+              <Download size={20} />
+              <span>Download Master Excel Workbook (.xlsx)</span>
+            </div>
+            <span style={{fontSize: '0.75rem', opacity: 0.9, background: 'rgba(255,255,255,0.25)', padding: '3px 8px', borderRadius: '4px', fontWeight: 700}}>8 Tabs</span>
+          </a>
+
+          <button 
+            onClick={handleExportCSV}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(0, 240, 255, 0.35)',
+              color: '#fff',
+              padding: '12px 18px',
+              borderRadius: 'var(--radius-sm)',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              letterSpacing: '0.02em',
+              transition: 'var(--transition-fast)'
+            }}
+          >
+            <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+              <Download size={18} color="var(--spider-sense)" />
+              <span>Export My Logged Progress (.csv)</span>
+            </div>
+            <span style={{fontSize: '0.75rem', color: 'var(--spider-sense)', fontWeight: 700}}>Live User Data</span>
+          </button>
+
+          <a 
+            href={`${import.meta.env.BASE_URL}StrengthBender_Coaching_Guide.csv`}
+            download="StrengthBender_Coaching_Guide.csv"
+            onClick={() => triggerHaptic('tick')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: 'var(--text-secondary)',
+              padding: '10px 18px',
+              borderRadius: 'var(--radius-sm)',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              textDecoration: 'none'
+            }}
+          >
+            <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+              <Download size={16} />
+              <span>Download Coaching Rationale Guide (.csv)</span>
+            </div>
+            <span style={{fontSize: '0.75rem', opacity: 0.7}}>68 Sessions</span>
+          </a>
+        </div>
+      </div>
+
       {/* Reset Progress Section */}
       <div className="glass-panel" style={{marginTop: '32px', borderColor: 'rgba(255, 0, 68, 0.35)', background: 'rgba(255, 0, 68, 0.05)'}}>
         <h4 style={{fontSize: '1.1rem', color: '#ff4d6d', marginBottom: '8px', fontWeight: 800}}>Reset Program Progress</h4>
@@ -429,9 +574,34 @@ function AppContent() {
         <h2 className="text-gradient" style={{marginTop: '1.75rem', marginBottom: '0.25rem', fontSize: '1.35rem'}}>
           PROGRAM OVERVIEW
         </h2>
-        <p className="text-secondary" style={{marginBottom: '1.25rem', fontSize: '0.9rem', color: '#a0a0a0'}}>
-          Select a week to view and track your training.
-        </p>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '8px'}}>
+          <p className="text-secondary" style={{margin: 0, fontSize: '0.9rem', color: '#a0a0a0'}}>
+            Select a week to view and track your training.
+          </p>
+          <a 
+            href={`${import.meta.env.BASE_URL}StrengthBender_13_Week_Program.xlsx`}
+            download="StrengthBender_13_Week_Program.xlsx"
+            onClick={() => triggerHaptic('tick')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(2, 132, 199, 0.18)',
+              border: '1px solid rgba(2, 132, 199, 0.45)',
+              color: '#38bdf8',
+              padding: '5px 12px',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+              cursor: 'pointer'
+            }}
+            title="Download Master Spreadsheet (.xlsx)"
+          >
+            <Download size={14} />
+            <span>Spreadsheet (.xlsx)</span>
+          </a>
+        </div>
 
         {/* Grid with W13 Action Starburst & Corner Webs */}
         <div className="week-grid">
